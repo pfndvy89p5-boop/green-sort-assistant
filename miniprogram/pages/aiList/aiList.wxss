@@ -1,0 +1,144 @@
+/* AI 识别候选列表页 —— Neo-Brutalist */
+.page {
+  min-height: 100vh;
+  background: #FFFFFF;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
+}
+
+/* ---------- 自定义返回按钮(与 result 页一致) ---------- */
+.nav-back {
+  position: fixed;
+  left: 24rpx;
+  width: 72rpx; height: 72rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.nav-back:active {
+  background: #FF006E !important;
+  box-shadow: none;
+  transform: translate(12rpx, 12rpx);
+}
+
+/* ---------- Hero:荧光绿纯色块 ---------- */
+.hero {
+  background: #CCFF00;
+  padding: 0 40rpx 56rpx;
+  border-bottom: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.nav-title {
+  font-size: 44rpx;
+  font-weight: 900;
+  color: #000;
+}
+.nav-sub {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+/* ---------- 候选卡片 ---------- */
+.list-wrap { padding: 32rpx; }
+.cand-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  gap: 24rpx;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.cand-card:active {
+  box-shadow: none !important;
+  transform: translate(16rpx, 16rpx) !important;
+  background: #FF006E;
+  transition: none;
+}
+.cand-card:active .cand-name,
+.cand-card:active .cand-score { color: #fff; }
+.cand-card:active .cand-desc { color: rgba(255,255,255,0.8); }
+
+.cand-icon {
+  width: 112rpx; height: 112rpx;
+  border: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cand-emoji { font-size: 64rpx; }
+
+.cand-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  min-width: 0;
+}
+.cand-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+.cand-name {
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #000;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cand-score {
+  font-size: 28rpx;
+  font-weight: 900;
+  color: #FF006E;
+  flex-shrink: 0;
+}
+.cand-bar {
+  height: 16rpx;
+  border: 3rpx solid #000;
+  background: #fff;
+  overflow: hidden;
+}
+.cand-bar-fill { height: 100%; }
+.cand-desc {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #555;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cand-tag {
+  padding: 10rpx 20rpx;
+  border: 4rpx solid #000;
+  font-size: 22rpx;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* ---------- 底部提示 ---------- */
+.retake-tip {
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #888;
+  padding: 16rpx 0 0;
+}

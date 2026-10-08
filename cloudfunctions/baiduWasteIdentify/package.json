@@ -1,0 +1,9 @@
+{
+  "name": "baiduWasteIdentify",
+  "version": "1.0.0",
+  "description": "百度AI垃圾分类识别（本地数据库优先，无第三方依赖）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

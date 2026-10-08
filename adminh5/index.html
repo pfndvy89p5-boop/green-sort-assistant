@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>控制台 · 绿分类助手管理后台</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+      <div class="logo"><span class="logo-mark">绿</span> 绿分类助手</div>
+      <nav>
+        <a href="index.html" class="active"><span class="nav-icon">📊</span> 控制台</a>
+        <a href="goods.html"><span class="nav-icon">📦</span> 物品管理</a>
+        <a href="feedback.html"><span class="nav-icon">💬</span> 反馈管理</a>
+        <a href="stats.html"><span class="nav-icon">📈</span> 数据统计</a>
+      </nav>
+      <div class="logout" onclick="logout()">退出登录</div>
+    </aside>
+
+    <!-- 主区 -->
+    <main class="main">
+      <div class="page-title">控制台</div>
+
+      <!-- 统计卡片 -->
+      <div class="stat-grid" id="statGrid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#E6F7F1;">🗑️</div>
+          <div class="num" id="goodsCount">-</div>
+          <div class="label">垃圾物品总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#EAF3F8;">💬</div>
+          <div class="num" id="feedbackCount">-</div>
+          <div class="label">反馈总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FFF7ED;">⏳</div>
+          <div class="num" id="pendingCount">-</div>
+          <div class="label">未处理反馈</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#E6F7F1;">✅</div>
+          <div class="num" id="handleRate">-</div>
+          <div class="label">反馈处理率</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;">
+        <!-- 分类统计柱状图 -->
+        <div class="card" style="flex:1.4;">
+          <div class="card-title">四大分类物品统计</div>
+          <div class="chart-bars" id="chart"></div>
+        </div>
+
+        <!-- 最新反馈预览 -->
+        <div class="card" style="flex:1;">
+          <div class="card-title">最新反馈</div>
+          <div id="latestFeedback"><div class="empty-tip">暂无反馈</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    if (!checkAuth()) throw new Error('需登录')
+
+    // 加载统计数据
+    async function loadData() {
+      // 控制台概览
+      const dash = await callFunction('adminGetDashboard')
+      if (handleCode(dash)) return
+      if (dash.code === 0) {
+        const d = dash.data
+        document.getElementById('goodsCount').textContent = d.goodsCount
+        document.getElementById('feedbackCount').textContent = d.feedbackCount
+        document.getElementById('pendingCount').textContent = d.pendingCount
+        renderFeedback(d.latestFeedback)
+      }
+
+      // 分类统计 + 处理率(用于图表)
+      const stats = await callFunction('adminGetStats')
+      if (stats.code === 0) {
+        document.getElementById('handleRate').textContent = stats.data.handleRate + '%'
+        renderChart(stats.data.categoryStats)
+      }
+    }
+
+    // 渲染柱状图(CSS 实现,无第三方库)
+    function renderChart(categoryStats) {
+      const el = document.getElementById('chart')
+      if (!categoryStats || categoryStats.length === 0) {
+        el.innerHTML = '<div class="empty-tip">暂无数据</div>'
+        return
+      }
+      const max = Math.max(...categoryStats.map(s => s.count), 1)
+      el.innerHTML = categoryStats.map(s => {
+        const h = Math.max(4, Math.round(s.count / max * 170))
+        return `
+          <div class="chart-bar-item">
+            <div class="chart-bar-num">${s.count}</div>
+            <div class="chart-bar-fill" style="height:${h}px"></div>
+            <div class="chart-bar-label">${s.category}</div>
+          </div>`
+      }).join('')
+    }
+
+    // 渲染最新反馈
+    function renderFeedback(list) {
+      const el = document.getElementById('latestFeedback')
+      if (!list || list.length === 0) {
+        el.innerHTML = '<div class="empty-tip">暂无反馈</div>'
+        return
+      }
+      el.innerHTML = list.map(f => `
+        <div style="padding:12px 0;border-bottom:1px solid #F0F3F0;">
+          <div style="font-size:13px;color:var(--text-soft);margin-bottom:6px;word-break:break-all;">${escapeHtml(f.content)}</div>
+          <div style="font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;">
+            <span>${escapeHtml(f.contact || '匿名')}</span>
+            <span>${new Date(f.createTime).toLocaleString('zh-CN')}</span>
+          </div>
+        </div>`).join('')
+    }
+
+    // HTML 转义,防止 XSS
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    }
+
+    loadData()
+  </script>
+</body>
+</html>

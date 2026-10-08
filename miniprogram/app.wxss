@@ -1,0 +1,425 @@
+/* ============================================================
+ * 绿分类助手 —— 全局样式 (Neo-Brutalist 新野兽派)
+ * 严格对齐 Stylekit.Top 官方规范 v1.0.0
+ *   核心:纯黑边框 + 硬边缘阴影 + 零圆角 + 高对比配色
+ *   交互:Physical Crushing(按压位移=阴影像素值)+ Brutal Snap(hover 硬切)
+ *   字体:标题 font-black(900) + 正文 font-mono(等宽)
+ * ============================================================ */
+
+/* ---------- 全局设计 token —— 严格对齐 neo-brutalist-tokens.json + globals.css ---------- */
+page {
+  /* === 核心色板 (tokens.json + globals.css) === */
+  --black: #000000;          /* primary / foreground */
+  --white: #ffffff;          /* secondary / background */
+
+  /* === Accent 色 —— globals.css 命名规范 === */
+  --accent-pink:  #ff006e;   /* accent-1 荧光粉红 */
+  --accent-green: #ccff00;   /* accent-2 荧光黄绿 */
+  --accent-blue:  #00d9ff;   /* accent-3 荧光蓝 */
+  --accent-yellow:#ff9500;   /* accent-4 荧光橙 */
+  --bright-yellow:#ffff00;   /* hover 背景亮黄 */
+
+  /* === 旧名别名 —— 兼容现有代码,小程序不支持 var() 嵌套,直接写值 === */
+  --hot:    #ff006e;
+  --lime:   #ccff00;
+  --cyan:   #00d9ff;
+  --orange: #ff9500;
+
+  /* === 分类配色(保持语义,直接写值避免 var 嵌套) === */
+  --recycle: #0a84ff;
+  --kitchen: #ccff00;
+  --danger:  #ff006e;
+  --other:   #8e8e93;
+
+  /* === Border === */
+  --border: 4rpx solid #000000;   /* borderWidth.4 = 4px → 8rpx? 小程序用 4rpx 更合适 */
+  --radius: 0rpx;                 /* borderRadius.none */
+
+  /* === Brutalist Shadow —— 三档系统 ===
+   * 官方 tokens.json 只有两档:brutal=4px / brutal-lg=8px
+   * 用户 Tailwind 样板额外提供:12rpx / 16rpx / 24rpx
+   * 完整三档覆盖所有使用场景
+   */
+  --shadow-s: 12rpx 12rpx 0 0 #000000;    /* Tailwind 6px — 小按钮/标签 */
+  --shadow:   16rpx 16rpx 0 0 #000000;    /* Tailwind 8px — 卡片/列表 */
+  --shadow-l: 24rpx 24rpx 0 0 #000000;   /* Tailwind 12px — 大 CTA */
+  /* 官方 tokens.json 别名 */
+  --brutal:    8rpx 8rpx 0 0 #000000;     /* tokens.shadow.brutal = 4px → 8rpx */
+  --brutal-lg: 16rpx 16rpx 0 0 #000000;  /* tokens.shadow.brutal-lg = 8px → 16rpx */
+  /* hover 阴影变粉红 */
+  --shadow-hot:   16rpx 16rpx 0 0 #ff006e;
+  --shadow-hot-l: 24rpx 24rpx 0 0 #ff006e;
+  --brutal-hot:    8rpx 8rpx 0 0 #ff006e;
+  --brutal-lg-hot: 16rpx 16rpx 0 0 #ff006e;
+
+  /* === 字体 ===
+   * tokens.json:Inter(primary) + JetBrains Mono(mono)
+   * 小程序无 Inter/JetBrains Mono,用系统字体栈降级
+   * globals.css:h1-h6 letter-spacing:-0.02em
+   */
+  background: var(--white);
+  color: var(--black);
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Heiti SC", sans-serif;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Brutalist 等宽字体装饰(仅用于英文标签/数字/caption,不用于中文正文) */
+.mono-text, .brutal-tag, .arrow, .label-mono {
+  font-family: "SF Mono", "Courier New", "Menlo", "Consolas", monospace;
+}
+
+view, text, button, input, textarea, scroll-view, image { box-sizing: border-box; }
+
+/* ============================================================
+ * Physical Crushing —— Tailwind 样板精确复刻
+ *   active 位移 = 阴影值(完全 Crush 到底,不是一半)
+ *   hover 阴影变粉红 + 卡片背景变亮黄 + 向上浮起
+ *   Transient: 150ms ease-out(Tailwind transition-all duration-150 ease-out)
+ * ============================================================ */
+
+/* .press-fade = Tailwind .btn:shadow-[6px_6px_0px] → active translate 12rpx + 粉红背景 */
+.press-fade {
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out, background 150ms ease-out;
+}
+.press-fade:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+
+/* .brutal-card = Tailwind card:shadow-[8px_8px_0] → hover 变粉红,active 16rpx Crush */
+.brutal-card {
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: var(--shadow);
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out, background 150ms ease-out;
+}
+.brutal-card:hover {
+  box-shadow: var(--shadow-hot);
+  transform: translate(-2rpx, -2rpx);
+  background: var(--bright-yellow);
+}
+.brutal-card:active {
+  box-shadow: none !important;
+  transform: translate(16rpx, 16rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+
+/* 小按钮级:12rpx Crush */
+.brutal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 24rpx 48rpx;
+  background: #fff;
+  color: #000;
+  font-size: 32rpx;
+  font-weight: 900;
+  letter-spacing: 0;
+  border: 4rpx solid #000;
+  box-shadow: var(--shadow-s);
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.brutal-btn:hover {
+  box-shadow: 16rpx 16rpx 0 0 #ff006e;
+  transform: translate(-2rpx, -2rpx);
+}
+.brutal-btn:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E !important;
+  color: #fff !important;
+  transition: none;
+}
+/* 大 CTA:24rpx Crush */
+.brutal-btn-lg {
+  padding: 36rpx 72rpx;
+  font-size: 40rpx;
+  box-shadow: var(--shadow-l);
+}
+.brutal-btn-lg:hover {
+  box-shadow: var(--shadow-hot-l);
+}
+.brutal-btn-lg:active {
+  box-shadow: none !important;
+  transform: translate(24rpx, 24rpx) !important;
+  background: #FF006E !important;
+  color: #fff !important;
+  transition: none;
+}
+
+/* 按钮配色变体 */
+.brutal-btn-primary  { background: #ff006e; color: #fff; }
+.brutal-btn-secondary{ background: #000;    color: #fff; }
+.brutal-btn-accent   { background: #ccff00; color: #000; }
+.brutal-btn-inverse  { background: #fff;    color: #000; }
+
+/* ---------- 通用页面 ---------- */
+.page { padding: 0; min-height: 100vh; }
+
+/* ============================================================
+ * 字重分级(严格对齐 tokens.json + globals.css)
+ *   标题:font-black 900,letter-spacing:-0.02em(globals.css h1-h6)
+ *   正文:font-weight 500,不用 mono(中文无等宽字形)
+ *   标签:font-mono uppercase letter-spacing:2rpx
+ * ============================================================ */
+.display-text { font-size: 120rpx; font-weight: 900; letter-spacing: -0.02em; line-height: 1.0; }
+.headline     { font-size: 80rpx;  font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; }
+.title-1      { font-size: 60rpx;  font-weight: 900; letter-spacing: -0.02em; line-height: 1.1; }
+.title-2      { font-size: 48rpx;  font-weight: 900; letter-spacing: -0.02em; line-height: 1.15; }
+.title-3      { font-size: 36rpx;  font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.body         { font-size: 28rpx;  font-weight: 500; line-height: 1.5; }
+.caption      { font-size: 22rpx;  font-weight: 500; line-height: 1.4; }
+.label-mono   { font-size: 22rpx;  font-weight: 700; letter-spacing: 2rpx; text-transform: uppercase; font-family: "SF Mono","Courier New",monospace; }
+
+/* ---------- emoji 图标(纯文本,零图片依赖) ---------- */
+.icon-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 52rpx;
+}
+.icon-emoji-xl { font-size: 112rpx; }
+.icon-emoji-lg { font-size: 80rpx; }
+.icon-emoji-md { font-size: 56rpx; }
+.icon-emoji-sm { font-size: 36rpx; }
+
+/* ---------- 粗黑分割线 ---------- */
+.divider { height: 4rpx; background: #000; margin: 0; }
+
+/* ---------- 列表项箭头(Brutalist 用 > 粗体等宽) ---------- */
+.arrow { color: #000; font-size: 36rpx; font-weight: 900; font-family: "SF Mono","Courier New",monospace; }
+
+/* ============================================================
+ * Brutalist 图标装饰方块
+ *   边框:4rpx 纯黑
+ *   阴影:4rpx(小) / 8rpx(标准)
+ *   active:Physical Crushing
+ * ============================================================ */
+.brutal-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: var(--shadow-s);
+}
+.brutal-icon-box-sm { width: 64rpx;  height: 64rpx;  box-shadow: var(--shadow-s); }
+.brutal-icon-box-md { width: 88rpx;  height: 88rpx;  box-shadow: var(--shadow); }
+.brutal-icon-box-lg { width: 120rpx; height: 120rpx; box-shadow: var(--shadow); }
+.brutal-icon-box-xl { width: 180rpx; height: 180rpx; box-shadow: var(--shadow-l); }
+
+.brutal-icon-box-sm:active { box-shadow: none; transform: translate(12rpx,12rpx); transition: none; }
+.brutal-icon-box-md:active { box-shadow: none; transform: translate(16rpx,16rpx); transition: none; }
+.brutal-icon-box-lg:active { box-shadow: none; transform: translate(16rpx,16rpx); transition: none; }
+.brutal-icon-box-xl:active { box-shadow: none; transform: translate(24rpx,24rpx); transition: none; }
+
+/* 配色变体 */
+.brutal-icon-box-hot   { background: #ff006e; color: #fff; }
+.brutal-icon-box-lime  { background: #ccff00; color: #000; }
+.brutal-icon-box-cyan  { background: #00d9ff; color: #000; }
+.brutal-icon-box-dark  { background: #000000; color: #ccff00; }
+.brutal-icon-box-white { background: #ffffff; color: #000000; }
+
+/* ============================================================
+ * Brutalist 输入框
+ *   必须:border 4rpx + 纯黑 + font-mono + focus 硬阴影
+ * ============================================================ */
+.brutal-input {
+  border: 4rpx solid #000;
+  background: #fff;
+  color: #000;
+  font-family: "SF Mono","Courier New",monospace;
+  font-size: 30rpx;
+  padding: 20rpx 28rpx;
+  box-shadow: var(--shadow-s);
+}
+.brutal-input:focus {
+  box-shadow: var(--shadow);
+  outline: none;
+}
+
+/* ============================================================
+ * Brutalist 标签/徽章
+ * ============================================================ */
+.brutal-tag {
+  display: inline-block;
+  padding: 10rpx 24rpx;
+  background: #000;
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 900;
+  letter-spacing: 0;
+  border: 4rpx solid #000;
+  font-family: "SF Mono","Courier New",monospace;
+}
+.brutal-tag-hot    { background: #ff006e; color: #fff; border-color: #ff006e; }
+.brutal-tag-lime   { background: #ccff00; color: #000; border-color: #ccff00; }
+.brutal-tag-cyan   { background: #00d9ff; color: #000; border-color: #00d9ff; }
+.brutal-tag-orange { background: #ff9500; color: #000; border-color: #ff9500; }
+
+/* ---------- SVG 图标包装(从 utils/icons.js 引入 data URI) ---------- */
+.bi-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ---------- 四分类 emoji 方块装饰(纯色 fill + emoji 文字留作分类图标) ---------- */
+/* 分类 emoji 保留,因为是分类识别的核心视觉锚点 */
+
+/* ---------- 空态图标包装 ---------- */
+.bi-empty-wrap { opacity: 0.35; }
+
+/* ============================================================
+ * Neo-Brutalist 全局工具类(从用户全局 CSS 样板移植)
+ * ============================================================ */
+
+/* 入场动画 */
+@keyframes neo-brutalist-fade-in {
+  from { opacity: 0; transform: translateY(16rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes neo-brutalist-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+.neo-brutalist-animate-in {
+  animation: neo-brutalist-fade-in 0.5s ease-out both;
+}
+.neo-brutalist-pulse {
+  animation: neo-brutalist-pulse 1.5s ease-in-out infinite;
+}
+
+/* globals.css:neo-brutalist-card 装饰性 hover 渐变遮罩 */
+/* 注意:小程序 touch 设备 :hover 触发有限,伪元素在组件隔离里也有限制 */
+/* 这里只给页面级(非组件)元素使用 */
+.neo-brutalist-card {
+  position: relative;
+  overflow: hidden;
+}
+.neo-brutalist-card::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+.neo-brutalist-card:hover::before {
+  opacity: 1;
+}
+
+/* globals.css:accent-corner 装饰性切角 */
+/* 小程序 clip-path 支持有限,如不生效可改用 border-radius:0 或背景装饰 */
+.neo-brutalist-accent-corner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
+}
+
+/* 渐变 —— 仅限装饰性元素(标题高光、AI 卡点缀),禁止全页面大面积渐变 */
+.neo-brutalist-gradient {
+  background: linear-gradient(135deg, #000000, #ff006e);
+}
+.neo-brutalist-gradient-text {
+  background: linear-gradient(135deg, #000000, #ff006e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 毛玻璃 —— 小程序不支持 backdrop-filter,留空壳类名方便将来降级 */
+.neo-brutalist-frosted {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+ * 统一顶部导航栏（全局共享）
+ *   黑底 + 荧光绿标题 + 硬边框底部
+ *   用法：<view class="top-bar" style="padding-top:{{safeTop}}px;">
+ *           <view class="top-bar-inner">
+ *             <view class="nav-back-inline">←</view>  ← 可选
+ *             <text class="top-bar-title">标题</text>
+ *             <view style="width:64rpx"></view>       ← 对称占位
+ *           </view>
+ *         </view>
+ * ============================================================ */
+.top-bar {
+  background: #000;
+  border-bottom: 4rpx solid #000;
+  position: relative;
+  z-index: 100;
+}
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx; /* 44px */
+  padding: 0 24rpx;
+}
+.top-bar-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 900;
+  color: #CCFF00;
+  letter-spacing: 2rpx;
+}
+.nav-back-inline {
+  width: 64rpx;
+  height: 64rpx;
+  background: #000;
+  border: 3rpx solid #CCFF00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3rpx 3rpx 0 #CCFF00;
+  transition: all 150ms ease-out;
+}
+.nav-back-inline:active {
+  box-shadow: none !important;
+  transform: translate(3rpx, 3rpx) !important;
+  background: #FF006E !important;
+  border-color: #FF006E !important;
+}
+
+/* 旧 floating 返回按钮（逐步废弃，被 nav-back-inline 取代） */
+.nav-back {
+  position: fixed;
+  left: 24rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.nav-back:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+
+/* ============================================================
+ * [禁止] 以下模式在本风格中绝对禁止!
+ *   ❌ border-radius / rounded-*     — 必须 0 圆角
+ *   ❌ bg-gradient-*(大面积)          — 必须纯色,渐变仅限装饰点缀
+ *   ❌ border-gray-* / border-slate — 必须纯黑边框
+ *   ❌ shadow-sm / shadow-md / shadow-lg — 必须硬边缘 shadow-[Xpx_Xpx_0px]
+ *   ❌ opacity 淡入淡出(交互态)       — 必须硬切(动画入场允许)
+ * ============================================================ */

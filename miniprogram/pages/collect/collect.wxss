@@ -1,0 +1,93 @@
+/* Neo-Brutalist 收藏页 */
+.page { padding: 0; background: #FFFFFF; padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); }
+
+/* Hero:荧光绿 */
+.hero {
+  background: #CCFF00;
+  padding: 0 40rpx 64rpx;
+  border-bottom: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+.hero-emoji { font-size: 96rpx; }
+.hero-text { display: flex; flex-direction: column; gap: 6rpx; }
+.nav-title { font-size: 48rpx; font-weight: 900; color: #000; letter-spacing: 0; }
+.nav-sub { font-size: 26rpx; font-weight: 500; color: #333; }
+
+/* 列表 */
+.list-wrap { padding: 32rpx; }
+.collect-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  gap: 24rpx;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.collect-card:active {
+  box-shadow: none !important;
+  transform: translate(16rpx, 16rpx) !important;
+  background: #FF006E;
+  transition: none;
+}
+.collect-card:active .card-name { color: #fff; }
+.card-icon {
+  width: 112rpx; height: 112rpx;
+  border: 4rpx solid #000;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-emoji { font-size: 60rpx; }
+.card-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  min-width: 0;
+}
+.card-name {
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+.card-tag {
+  align-self: flex-start;
+  padding: 8rpx 20rpx;
+  border: 4rpx solid #000;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+.card-ops { display: flex; align-items: center; gap: 16rpx; }
+.del-btn {
+  font-size: 24rpx;
+  font-weight: 900;
+  color: #fff;
+  padding: 10rpx 20rpx;
+  background: #FF006E;
+  border: 4rpx solid #000;
+  box-shadow: 6rpx 6rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.del-btn:active {
+  box-shadow: none !important;
+  transform: translate(6rpx, 6rpx) !important;
+  background: #000;
+  color: #FF006E;
+  transition: none;
+}
+
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  color: #555;
+  font-size: 28rpx;
+  font-weight: 500;
+  padding: 200rpx 0;
+}

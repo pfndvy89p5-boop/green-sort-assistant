@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/knowledge/knowledge",
+    "pages/result/result",
+    "pages/camera/camera",
+    "pages/aiList/aiList",
+    "pages/search/search",
+    "pages/collect/collect",
+    "pages/mine/mine",
+    "pages/settings/settings",
+    "pages/admin/admin"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationStyle": "custom",
+    "backgroundColor": "#CCFF00"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#86868B",
+    "selectedColor": "#27C48D",
+    "borderStyle": "white",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/knowledge/knowledge", "text": "知识库" },
+      { "pagePath": "pages/collect/collect", "text": "收藏" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

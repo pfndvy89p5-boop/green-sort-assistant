@@ -1,0 +1,228 @@
+/* 设置页 Neo-Brutalist —— 严格对齐首页/我的页风格 */
+.page { padding: 0; background: #FFFFFF; padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); }
+
+/* Hero:荧光绿底 + 粗黑边框 + 硬阴影 */
+.hero {
+  background: #CCFF00;
+  padding: 0 40rpx 40rpx;
+  border-bottom: 4rpx solid #000;
+  box-shadow: 0 16rpx 0 0 #000;
+  position: relative;
+}
+.hero-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+}
+.back-btn {
+  width: 56rpx; height: 56rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  transition: box-shadow 150ms, transform 150ms;
+}
+.back-btn:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E !important;
+}
+.hero-title {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+
+/* 分组标题 */
+.group-title {
+  font-size: 26rpx;
+  font-weight: 900;
+  color: #000;
+  padding: 40rpx 40rpx 16rpx;
+  letter-spacing: 1rpx;
+}
+
+/* 卡片组:白底 + 粗黑边框 + 硬阴影 */
+.card-group {
+  background: #fff;
+  margin: 0 32rpx;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  overflow: hidden;
+}
+
+/* 设置项 */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 4rpx solid #000;
+  transition: background 120ms;
+}
+.setting-item:last-child { border-bottom: none; }
+.setting-item:active { background: #FF006E !important; }
+.setting-item:active .si-label, .setting-item:active .si-sub,
+.setting-item:active .si-ver { color: #fff !important; }
+.setting-item:active .arrow { color: #fff !important; }
+
+.si-left { display: flex; align-items: center; gap: 22rpx; }
+.si-right { display: flex; align-items: center; gap: 16rpx; }
+
+/* 图标方块 */
+.si-icon {
+  width: 56rpx; height: 56rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.si-text-wrap { display: flex; flex-direction: column; gap: 4rpx; }
+.si-label {
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+.si-sub {
+  font-size: 22rpx;
+  font-weight: 500;
+  color: #888;
+}
+.si-ver {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #888;
+}
+.arrow {
+  font-family: "SF Mono","Courier New",monospace;
+  font-size: 36rpx;
+  font-weight: 900;
+  color: #000;
+}
+
+/* 底部版权 */
+.footer {
+  text-align: center;
+  margin-top: 80rpx;
+  padding: 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.footer-text {
+  font-size: 26rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 2rpx;
+}
+.footer-sub {
+  font-size: 22rpx;
+  font-weight: 500;
+  color: #888;
+}
+
+/* ---------- 弹层 ---------- */
+.modal-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-box {
+  width: 640rpx;
+  max-height: 70vh;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 24rpx 24rpx 0 0 #000;
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+}
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 24rpx;
+  color: #000;
+}
+.modal-body {
+  flex: 1;
+  max-height: 400rpx;
+  margin-bottom: 28rpx;
+}
+.modal-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+.modal-actions { display: flex; gap: 20rpx; }
+.fb-btn {
+  flex: 1;
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  border: 4rpx solid #000;
+  font-size: 30rpx;
+  font-weight: 900;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  transition: box-shadow 150ms, transform 150ms;
+}
+.fb-btn:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+}
+.fb-submit { background: #FF006E; color: #fff; }
+.fb-submit:active { background: #000 !important; }
+.fb-cancel { background: #fff; color: #000; }
+.fb-cancel:active { background: #FF006E !important; color: #fff; }
+
+/* ---------- 反馈弹层复用 ---------- */
+.fb-textarea {
+  width: 100%;
+  height: 240rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+.fb-contact-switch {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+.fb-switch-tab {
+  padding: 10rpx 24rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  border: 4rpx solid #000;
+  background: #fff;
+  color: #000;
+  margin-right: 8rpx;
+}
+.fb-switch-tab.active { background: #000; color: #CCFF00; }
+.fb-contact-optional {
+  font-size: 22rpx;
+  font-weight: 500;
+  color: #888;
+  margin-left: auto;
+}
+.fb-contact {
+  width: 100%;
+  height: 88rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+}

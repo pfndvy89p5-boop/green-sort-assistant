@@ -1,0 +1,74 @@
+/* ============================================================
+ * 自定义底部 Tab Bar —— Neo-Brutalist 新野兽派
+ * 荧光黄绿底 + 8rpx 粗黑上边框 + SVG 图标 + 激活态反色
+ * ============================================================ */
+
+/* 微信小程序 custom-tab-bar 自动定位到底部,不要写 position:fixed! */
+.tabbar {
+  background: #CCFF00;
+  border-top: 4rpx solid #000;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tabbar-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  height: 140rpx;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  border-right: 4rpx solid #000;
+  transition: background 120ms ease-out;
+}
+.tab-item:last-child { border-right: none; }
+
+/* 激活态反色:黑底 + 荧光绿文字 */
+.tab-item.active { background: #000; }
+
+/* 图标容器:粗黑边小方块 + --shadow-s = 12rpx + Physical Crushing */
+.tab-icon-box {
+  width: 64rpx;
+  height: 64rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.tab-icon-box:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  transition: none;
+}
+/* SVG 图标在容器内 44rpx */
+.tab-icon {
+  width: 44rpx;
+  height: 44rpx;
+  display: block;
+}
+/* active 态:粉底 + 白图标 */
+.tab-item.active .tab-icon-box {
+  background: #FF006E;
+  transform: scale(1.1);
+}
+
+.tab-text {
+  font-size: 22rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+.tab-item.active .tab-text { color: #CCFF00; }
+
+/* Brutalist 按压反馈:粉红背景(覆盖 hover-class="press-fade" 时直接变粉) */
+.press-fade { background: #FF006E !important; }
+.press-fade .tab-text { color: #fff !important; }

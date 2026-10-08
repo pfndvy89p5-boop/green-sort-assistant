@@ -1,0 +1,135 @@
+<!-- 设置页 Neo-Brutalist —— 荧光绿 Hero + 白底卡片 + 粗黑边框 -->
+<view class="page">
+  <!-- Hero 区:荧光黄绿 + 返回按钮 -->
+  <view class="hero" style="padding-top:{{safeTop + 16}}px">
+    <view class="hero-row">
+      <view class="back-btn" bindtap="goBack">
+        <image class="bi-icon" src="{{icons.BLACK.arrowLeft}}" style="width:32rpx;height:32rpx" />
+      </view>
+      <text class="hero-title">设置</text>
+      <view style="width:56rpx"></view>
+    </view>
+  </view>
+
+  <!-- 设置卡片组 1:数据管理 -->
+  <view class="group-title">数据管理</view>
+  <view class="card-group">
+    <view class="setting-item" bindtap="clearCache">
+      <view class="si-left">
+        <view class="si-icon" style="background:#FF006E">
+          <image class="bi-icon" src="{{icons.WHITE.settings}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <view class="si-text-wrap">
+          <text class="si-label">清除缓存</text>
+          <text class="si-sub">当前占用 {{cacheSize}}</text>
+        </view>
+      </view>
+      <view class="arrow">></view>
+    </view>
+    <view class="setting-item" bindtap="clearHistory">
+      <view class="si-left">
+        <view class="si-icon" style="background:#FF9500">
+          <image class="bi-icon" src="{{icons.BLACK.book}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <view class="si-text-wrap">
+          <text class="si-label">清空搜索历史</text>
+          <text class="si-sub">共 {{historyCount}} 条记录</text>
+        </view>
+      </view>
+      <view class="arrow">></view>
+    </view>
+  </view>
+
+  <!-- 设置卡片组 2:关于 -->
+  <view class="group-title">关于</view>
+  <view class="card-group">
+    <view class="setting-item" bindtap="showAbout">
+      <view class="si-left">
+        <view class="si-icon">
+          <image class="bi-icon" src="{{icons.BLACK.info}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <view class="si-label">关于我们</view>
+      </view>
+      <view class="si-right">
+        <text class="si-ver">v3.0.0</text>
+        <view class="arrow">></view>
+      </view>
+    </view>
+    <view class="setting-item" bindtap="showHelp">
+      <view class="si-left">
+        <view class="si-icon">
+          <image class="bi-icon" src="{{icons.BLACK.book}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <view class="si-label">使用帮助</view>
+      </view>
+      <view class="arrow">></view>
+    </view>
+    <view class="setting-item" bindtap="showPrivacy">
+      <view class="si-left">
+        <view class="si-icon">
+          <image class="bi-icon" src="{{icons.BLACK.star}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <view class="si-label">隐私政策</view>
+      </view>
+      <view class="arrow">></view>
+    </view>
+  </view>
+
+  <!-- 设置卡片组 3:反馈 -->
+  <view class="group-title">其他</view>
+  <view class="card-group">
+    <view class="setting-item" bindtap="goFeedback">
+      <view class="si-left">
+        <view class="si-icon" style="background:#00D9FF">
+          <image class="bi-icon" src="{{icons.BLACK.chat}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <view class="si-label">意见反馈</view>
+      </view>
+      <view class="arrow">></view>
+    </view>
+  </view>
+
+  <!-- 底部版权 -->
+  <view class="footer">
+    <text class="footer-text">BRUTAL® 绿分类助手</text>
+    <text class="footer-sub">让分类成为习惯</text>
+  </view>
+
+  <!-- 关于/帮助/隐私 弹层 -->
+  <view class="modal-mask" wx:if="{{showModal}}" bindtap="closeModal">
+    <view class="modal-box" catchtap="stopProp">
+      <view class="modal-title">{{modalTitle}}</view>
+      <scroll-view class="modal-body" scroll-y>
+        <text class="modal-text">{{modalContent}}</text>
+      </scroll-view>
+      <view class="modal-actions">
+        <view class="fb-btn fb-submit" bindtap="closeModal">知道了</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 反馈弹层(独立,不再绕回 mine) -->
+  <view class="modal-mask" wx:if="{{showFeedback}}" bindtap="closeFeedback">
+    <view class="modal-box" catchtap="stopProp">
+      <view class="modal-title">意见反馈</view>
+      <textarea class="fb-textarea" placeholder="请输入您的意见或建议,感谢您的支持"
+                value="{{fbContent}}" bindinput="inputFbContent" maxlength="500"></textarea>
+      <view class="fb-contact-switch">
+        <view class="fb-switch-tab {{fbContactType==='phone'?'active':''}}"
+              data-type="phone" bindtap="switchContactType">手机号</view>
+        <view class="fb-switch-tab {{fbContactType==='email'?'active':''}}"
+              data-type="email" bindtap="switchContactType">邮箱</view>
+        <text class="fb-contact-optional">选填</text>
+      </view>
+      <input class="fb-contact"
+             placeholder="{{fbContactType==='phone'?'请输入 11 位手机号':'请输入邮箱地址'}}"
+             type="{{fbContactType==='phone'?'number':'text'}}"
+             value="{{fbContact}}" bindinput="inputFbContact"
+             maxlength="{{fbContactType==='phone'?11:50}}" />
+      <view class="modal-actions">
+        <view class="fb-btn fb-cancel" bindtap="closeFeedback">取消</view>
+        <view class="fb-btn fb-submit" bindtap="submitFeedback">{{submitting?'提交中...':'提交'}}</view>
+      </view>
+    </view>
+  </view>
+</view>

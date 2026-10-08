@@ -1,0 +1,295 @@
+/* Neo-Brutalist 个人中心 */
+.page { padding: 0; background: #FFFFFF; padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); }
+
+/* 用户 Hero:荧光绿底 + 粗黑边框 + 黑色头像方块 */
+.user-card {
+  background: #CCFF00;
+  padding: 0 40rpx 60rpx;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  border-bottom: 4rpx solid #000;
+  /* 底部硬阴影,和首页 Hero 一致的层次感 */
+  box-shadow: 0 16rpx 0 0 #000;
+  min-height: 320rpx;
+  justify-content: center;
+}
+.avatar-box {
+  position: relative;
+  width: 160rpx;
+  height: 160rpx;
+  background: #000;
+  border-radius: 0;
+  border: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  box-shadow: 8rpx 8rpx 0 0 #FF006E;
+}
+.avatar-btn {
+  width: 100%; height: 100%;
+  padding: 0; margin: 0;
+  border-radius: 0;
+  background: #000;
+  border: none;
+  line-height: 1;
+}
+.avatar-btn::after { border: none; }
+.avatar-img {
+  width: 100%; height: 100%;
+  border-radius: 0;
+  display: block;
+  border: 4rpx solid #000;
+  box-sizing: border-box;
+  background: #fff;
+}
+.avatar-ring {
+  position: absolute;
+  top: -8rpx; left: -8rpx; right: -8rpx; bottom: -8rpx;
+  border: 6rpx solid #FF006E;
+  border-radius: 0;
+  pointer-events: none;
+}
+
+.nickname-input {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #000;
+  text-align: center;
+  padding: 4rpx 16rpx;
+  min-width: 160rpx;
+  border-bottom: 2rpx solid transparent;
+  transition: border-color .2s;
+}
+.nickname-input:focus { border-bottom-color: #000; }
+.nickname-ph { color: rgba(0,0,0,0.45); font-weight: 500; }
+.nickname-input.is-locked {
+  color: #000;
+  border-bottom: 2rpx solid #000;
+  background: transparent;
+}
+.locked-tip {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #FF006E;
+  background: #fff;
+  padding: 2rpx 12rpx;
+  border: 2rpx solid #000;
+}
+
+/* 菜单列表:向上 overlap Hero 底部增加层次感 */
+.menu-list {
+  background: #fff;
+  margin: -16rpx 32rpx 0;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  position: relative;
+  z-index: 2;
+}
+
+/* Brutalist 菜单图标容器:粗黑边小方块 */
+.menu-icon-box {
+  width: 56rpx;
+  height: 56rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 菜单列表样式 */
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 4rpx solid #000;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active {
+  background: #FF006E;
+}
+.menu-item:active .menu-text { color: #fff; }
+.menu-item:active .arrow { color: #fff; }
+.menu-left { display: flex; align-items: center; gap: 22rpx; }
+.menu-text {
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+
+/* 积分徽章 */
+.points-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-top: 8rpx;
+  background: #000;
+  padding: 8rpx 24rpx;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 0 #FF006E;
+}
+.points-num {
+  font-size: 48rpx;
+  font-weight: 900;
+  color: #CCFF00;
+  font-family: Consolas, monospace;
+}
+.points-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* 最近丢弃记录 */
+.history-section {
+  margin: 40rpx 32rpx 0;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+}
+.history-header {
+  padding: 24rpx 32rpx;
+  border-bottom: 4rpx solid #000;
+  background: #CCFF00;
+}
+.history-title {
+  font-size: 32rpx;
+  font-weight: 900;
+  color: #000;
+}
+.history-list { padding: 0; }
+.history-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+  border-bottom: 4rpx solid #000;
+  gap: 20rpx;
+}
+.history-row:last-child { border-bottom: none; }
+.history-row:active { background: #FF006E; }
+.history-row:active .history-name { color: #fff; }
+.history-row:active .history-source { color: #fff; }
+.history-row:active .history-arrow { color: #fff; }
+.history-cat-tag {
+  flex-shrink: 0;
+  padding: 6rpx 14rpx;
+  font-size: 20rpx;
+  font-weight: 900;
+  color: #000;
+  border: 3rpx solid #000;
+  box-shadow: 3rpx 3rpx 0 #000;
+}
+.history-cat-tag.recycle { background: #3A86FF; color: #fff; }
+.history-cat-tag.kitchen { background: #06D6A0; color: #000; }
+.history-cat-tag.danger { background: #FF006E; color: #fff; }
+.history-cat-tag.other { background: #495057; color: #fff; }
+.history-info { flex: 1; display: flex; flex-direction: column; gap: 4rpx; }
+.history-name { font-size: 28rpx; font-weight: 700; color: #000; }
+.history-source { font-size: 22rpx; color: #999; font-weight: 500; }
+.history-arrow { font-size: 32rpx; font-weight: 900; color: #ccc; }
+
+/* ========== 签到卡片 ========== */
+.checkin-card {
+  margin: 40rpx 32rpx 0;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  padding: 28rpx;
+}
+.checkin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx; }
+.checkin-title { font-size: 30rpx; font-weight: 900; color: #000; }
+.checkin-streak { font-size: 24rpx; font-weight: 700; color: #FF006E; background: #CCFF00; padding: 4rpx 16rpx; border: 2rpx solid #000; }
+
+.checkin-btn {
+  width: 100%;
+  padding: 24rpx 0;
+  background: #CCFF00;
+  color: #000;
+  font-size: 30rpx;
+  font-weight: 900;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 0 #000;
+  border-radius: 0;
+  letter-spacing: 2rpx;
+}
+.checkin-btn::after { border: none; }
+.checkin-btn.is-signed { background: #E0E0E0; color: #888; box-shadow: none; }
+.checkin-btn:active:not(.is-signed) { transform: translate(8rpx, 8rpx); box-shadow: none; }
+
+.checkin-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+  margin-top: 20rpx;
+}
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #F5F5F5;
+  border: 2rpx solid #000;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #999;
+  min-height: 56rpx;
+}
+.cal-cell.is-signed { background: #CCFF00; color: #000; }
+.cal-cell.is-today { border-color: #FF006E; border-width: 4rpx; }
+.cal-cell.is-future { opacity: 0.35; }
+.cal-day { font-size: 22rpx; }
+.cal-dot { font-size: 18rpx; color: #FF006E; margin-top: 2rpx; }
+
+.checkin-rewards {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 16rpx;
+  flex-wrap: wrap;
+}
+.reward-chip {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #000;
+  background: #FFF;
+  padding: 4rpx 12rpx;
+  border: 2rpx solid #000;
+}
+
+/* ========== 数据统计卡片 ========== */
+.stats-card {
+  margin: 32rpx 32rpx 0;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+}
+.stats-header {
+  padding: 20rpx 28rpx;
+  border-bottom: 4rpx solid #000;
+  background: #000;
+}
+.stats-title { font-size: 26rpx; font-weight: 900; color: #CCFF00; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 4rpx solid #000;
+}
+.stats-grid:last-child { border-bottom: none; }
+.stat-item {
+  padding: 28rpx 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  border-right: 4rpx solid #000;
+}
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: 34rpx; font-weight: 900; color: #FF006E; font-family: Consolas, monospace; }
+.stat-label { font-size: 20rpx; color: #333; font-weight: 600; }

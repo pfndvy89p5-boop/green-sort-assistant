@@ -1,0 +1,247 @@
+/* Neo-Brutalist 首页 —— 严格对齐 brutal-landing-template page.tsx */
+.page {
+  padding: 0;
+  background: #FFFFFF;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+}
+
+/* ---------- Hero 区(荧光黄绿纯色块 + 粗黑下边框 + 底部阴影层次感) ---------- */
+/* 纯装饰区:品牌 Logo + 标题,不放交互按钮(减少误触) */
+.hero {
+  background: #CCFF00;
+  padding: 0 40rpx 24rpx;
+  border-bottom: 4rpx solid #000;
+  position: relative;
+  min-height: 26vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 16rpx 0 0 #000;
+}
+/* Hero 底部装饰三角:Neo-Brutalist 风格,让硬切变有趣 */
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 40rpx;
+  bottom: -20rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: #CCFF00;
+  border-right: 4rpx solid #000;
+  border-bottom: 4rpx solid #000;
+  transform: rotate(45deg);
+}
+.hero-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.icon-badge-round {
+  width: 56rpx; height: 56rpx;
+  background: #000;
+  border: 4rpx solid #000;
+  display: flex; align-items: center; justify-content: center;
+}
+/* 模板 Logo:BRUTAL<span style="color:#ff006e">.</span> */
+.title {
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+.title .dot { color: #FF006E; }
+
+/* Hero 大标题 —— 样板:tracking-tight = letter-spacing:-0.025em */
+.hero-title-block { text-align: left; }
+.hero-big-title {
+  font-size: 72rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: -0.02em; /* 全局 CSS:h1-h6 letter-spacing:-0.02em */
+  line-height: 1.0;
+  display: block;
+}
+.hero-big-sub {
+  font-size: 24rpx;
+  font-weight: 900;
+  color: #000;
+  margin-top: 4rpx;
+  display: block;
+}
+/* ---------- 搜索条(中档 --shadow = 16rpx,向上 overlap Hero 增加层次) ---------- */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 4rpx solid #000;
+  padding: 18rpx 24rpx;
+  gap: 12rpx;
+  margin: -16rpx 32rpx 0;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+  position: relative;
+  z-index: 2;
+}
+.search-box:active {
+  box-shadow: none !important;
+  transform: translate(16rpx, 16rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+.search-tip {
+  color: #000;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+/* 双 CTA:默认白底,按压才变色(和查询栏统一风格) */
+.func-row {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 32rpx 0;
+}
+.func-card {
+  flex: 1;
+  border: 4rpx solid #000;
+  padding: 28rpx 0 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  background: #fff;
+  box-shadow: 24rpx 24rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out, background 150ms ease-out;
+  position: relative;
+}
+/* 默认都白底黑字,hover/active 才区分 */
+.primary-card .func-text { color: #000; }
+.normal-card .func-text { color: #000; }
+.normal-card .func-sub { color: #555; }
+.primary-card .func-sub { color: #555; }
+
+/* hover/active:两个卡片统一变红,主题一致 */
+.primary-card:hover, .normal-card:hover {
+  box-shadow: 24rpx 24rpx 0 0 #ff006e;
+  background: #FF006E !important;
+  transform: translate(-2rpx, -2rpx);
+}
+/* hover/active 时文字变白(图标保留黑色,红底黑图标对比清晰) */
+.primary-card:hover .func-text, .primary-card:hover .func-sub,
+.normal-card:hover .func-text, .normal-card:hover .func-sub,
+.primary-card:active .func-text, .primary-card:active .func-sub,
+.normal-card:active .func-text, .normal-card:active .func-sub { color: #fff; }
+
+/* Physical Crushing:两个卡片按压都变红 + 完全压平 */
+.primary-card:active, .normal-card:active {
+  box-shadow: none !important;
+  transform: translate(24rpx, 24rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+.func-text {
+  font-size: 28rpx;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+.func-sub {
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+/* ---------- Section 标题 ---------- */
+.section-title, .recent-title {
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #000;
+  margin: 32rpx 32rpx 14rpx;
+  padding-bottom: 8rpx;
+  border-bottom: 4rpx solid #000;
+  display: inline-block;
+}
+
+/* ---------- 四分类卡片(与拍照识别卡同款:白底/居中/24rpx 硬阴影/按压变粉压平) ---------- */
+.four-cat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  padding: 0 32rpx;
+}
+.cat-card {
+  border: 4rpx solid #000;
+  padding: 28rpx 22rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  background: #fff;
+  box-shadow: 24rpx 24rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out, background 150ms ease-out;
+  position: relative;
+}
+/* hover/active:阴影变粉 + 向上浮起(同拍照卡) */
+.cat-card:hover {
+  box-shadow: 24rpx 24rpx 0 0 #ff006e;
+  transform: translate(-2rpx, -2rpx);
+}
+/* Physical Crushing:按压变粉 + 24rpx 完全压平(同拍照卡) */
+.cat-card:active {
+  box-shadow: none !important;
+  transform: translate(24rpx, 24rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+.cat-card:active .cat-name { color: #fff !important; }
+.cat-name {
+  font-size: 28rpx;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: #000;
+}
+
+/* ---------- 最近查询列表(中档 --shadow = 16rpx) ---------- */
+.recent-list {
+  margin: 0 32rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 16rpx 16rpx 0 0 #000;
+  overflow: hidden;
+}
+.recent-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  border-bottom: 4rpx solid #000;
+  gap: 16rpx;
+  transition: background 120ms;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-item:active { background: #FF006E; }
+.recent-item:active .item-name { color: #fff; }
+.recent-item:active .arrow { color: #fff; }
+.recent-dot {
+  width: 14rpx; height: 14rpx;
+  background: #FF006E;
+  flex-shrink: 0;
+}
+.item-name {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #000;
+}
+.empty-tip {
+  margin: 0 32rpx;
+  text-align: center;
+  background: #fff;
+  border: 4rpx solid #000;
+  padding: 80rpx 0;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #555;
+}

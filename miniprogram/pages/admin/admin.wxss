@@ -1,0 +1,214 @@
+.admin-page {
+  min-height: 100vh;
+  background: #F6F6F6;
+  padding-bottom: 120rpx;
+  font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+}
+.admin-nav {
+  background: #000;
+  color: #CCFF00;
+  border-bottom: 4rpx solid #000;
+}
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 88rpx; /* 44px */
+  padding-left: 32rpx;
+}
+.nav-title { font-size: 32rpx; font-weight: 800; letter-spacing: 2rpx; }
+
+.tab-bar {
+  display: flex;
+  background: #fff;
+  padding: 12rpx 8rpx;
+  border-bottom: 4rpx solid #000;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  padding: 12rpx 0;
+  margin: 0 4rpx;
+  font-weight: 700;
+  color: #666;
+  transition: all .15s;
+}
+.tab-item.active {
+  background: #CCFF00;
+  color: #000;
+  border: 2rpx solid #000;
+  box-shadow: 4rpx 4rpx 0 #000;
+}
+
+/* 导航栏右侧退出按钮 */
+.nav-exit {
+  font-size: 24rpx;
+  font-weight: 800;
+  padding: 8rpx 20rpx;
+  background: #FF006E;
+  color: #fff;
+  border: 2rpx solid #CCFF00;
+  box-shadow: 4rpx 4rpx 0 #CCFF00;
+  letter-spacing: 2rpx;
+}
+.nav-exit:active {
+  transform: translate(4rpx, 4rpx);
+  box-shadow: none;
+}
+
+.admin-body { padding: 24rpx; }
+
+/* Dashboard */
+.stat-grid { display: flex; gap: 16rpx; margin-bottom: 24rpx; }
+.stat-card {
+  flex: 1;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 #000;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+.stat-num {
+  font-size: 48rpx;
+  font-weight: 900;
+  color: #000;
+  background: #CCFF00;
+  padding: 4rpx 16rpx;
+  border-radius: 0;
+}
+.stat-label { font-size: 22rpx; color: #666; font-weight: 600; }
+
+.card {
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 #000;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+.card-head {
+  font-size: 28rpx;
+  font-weight: 800;
+  margin-bottom: 16rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 3rpx solid #000;
+  color: #000;
+}
+.list-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 2rpx dashed #ccc;
+  font-size: 26rpx;
+}
+.list-row:last-child { border-bottom: none; }
+.list-name { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-time { font-size: 22rpx; color: #999; }
+
+/* Users */
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.admin-avatar {
+  width: 88rpx; height: 88rpx;
+  border: 4rpx solid #000;
+  background: #f0f0f0;
+  box-shadow: 4rpx 4rpx 0 #000;
+}
+.admin-avatar.placeholder {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; background: #CCFF00;
+}
+.user-info { flex: 1; display: flex; flex-direction: column; gap: 4rpx; }
+.user-name { font-size: 28rpx; font-weight: 800; }
+.user-id { font-size: 20rpx; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-stats { display: flex; gap: 12rpx; flex-wrap: wrap; }
+.chip {
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 4rpx 12rpx;
+  background: #F6F6F6;
+  border: 2rpx solid #000;
+}
+.chip.time { background: #FFE985; }
+
+/* History */
+.hist-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.hist-name { font-size: 28rpx; font-weight: 700; }
+.hist-source { font-size: 32rpx; }
+.hist-meta { display: flex; gap: 12rpx; }
+.pager {
+  display: flex; justify-content: center; align-items: center;
+  gap: 24rpx; padding: 24rpx 0;
+}
+.page-btn {
+  padding: 12rpx 32rpx;
+  background: #000; color: #fff;
+  font-size: 24rpx; font-weight: 700;
+}
+.page-info { font-size: 24rpx; color: #666; font-weight: 600; }
+
+/* Points ranking */
+.rank-row { display: flex; align-items: center; gap: 12rpx; margin-bottom: 4rpx; }
+.rank-no {
+  width: 56rpx; height: 56rpx;
+  background: #000; color: #CCFF00;
+  font-weight: 900; font-size: 26rpx;
+  display: flex; align-items: center; justify-content: center;
+  border: 2rpx solid #000;
+}
+.rank-openid { flex: 1; font-size: 22rpx; color: #555; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-pts { font-weight: 900; font-size: 28rpx; color: #FF006E; }
+.rank-sub { font-size: 18rpx; color: #888; margin-top: 8rpx; padding-left: 68rpx; }
+
+/* Goods */
+.goods-row { display: flex; align-items: center; gap: 12rpx; }
+.goods-name { flex: 1; font-weight: 700; font-size: 28rpx; }
+.goods-cat {
+  font-size: 22rpx; font-weight: 700;
+  padding: 4rpx 12rpx;
+  background: #3A86FF; color: #fff;
+}
+.goods-del {
+  font-size: 22rpx; font-weight: 700;
+  padding: 6rpx 16rpx;
+  background: #FF006E; color: #fff;
+  border: 2rpx solid #000;
+}
+
+/* Feedback */
+.fb-content { font-size: 28rpx; font-weight: 600; margin-bottom: 12rpx; display: block; }
+.fb-row { display: flex; justify-content: space-between; margin-bottom: 12rpx; }
+.fb-time { font-size: 22rpx; color: #999; }
+.fb-status {
+  font-size: 22rpx; font-weight: 700;
+  padding: 4rpx 12rpx;
+}
+.fb-status.pending { background: #FFE985; }
+.fb-status.done { background: #CCFF00; }
+.fb-actions { display: flex; gap: 16rpx; }
+.fb-action {
+  font-size: 22rpx; font-weight: 700;
+  padding: 8rpx 20rpx;
+  background: #000; color: #fff;
+  border: 2rpx solid #000;
+}
+.fb-action.del { background: #FF006E; }
+
+.empty { text-align: center; padding: 80rpx; color: #999; font-size: 26rpx; }
+.loading-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 32rpx;
+  z-index: 999;
+}

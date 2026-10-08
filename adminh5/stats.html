@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鏁版嵁缁熻 路 缁垮垎绫诲姪鎵嬬鐞嗗悗鍙?/title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo"><span class="logo-mark">缁?/span> 缁垮垎绫诲姪鎵?/div>
+      <nav>
+        <a href="index.html"><span class="nav-icon">馃搳</span> 鎺у埗鍙?/a>
+        <a href="goods.html"><span class="nav-icon">馃摝</span> 鐗╁搧绠＄悊</a>
+        <a href="feedback.html"><span class="nav-icon">馃挰</span> 鍙嶉绠＄悊</a>
+        <a href="stats.html" class="active"><span class="nav-icon">馃搱</span> 鏁版嵁缁熻</a>
+      </nav>
+      <div class="logout" onclick="logout()">閫€鍑虹櫥褰?/div>
+    </aside>
+
+    <main class="main">
+      <div class="page-title">鏁版嵁缁熻</div>
+
+      <!-- 姒傝缁熻鍗＄墖 -->
+      <div class="stat-grid">
+        <div class="stat-card"><div class="num" id="goodsTotal">-</div><div class="label">鍨冨溇鐗╁搧鎬绘暟</div></div>
+        <div class="stat-card"><div class="num" id="feedbackTotal">-</div><div class="label">鍙嶉鎬绘暟</div></div>
+        <div class="stat-card"><div class="num" id="feedbackHandled">-</div><div class="label">宸插鐞嗗弽棣?/div></div>
+        <div class="stat-card"><div class="num" id="handleRate">-</div><div class="label">鍙嶉澶勭悊鐜?/div></div>
+      </div>
+
+      <div style="display:flex;gap:20px;">
+        <!-- 鍒嗙被缁熻鏌辩姸鍥?-->
+        <div class="card" style="flex:1.4;">
+          <div class="card-title">鍥涘ぇ鍒嗙被鐗╁搧鏁伴噺</div>
+          <div class="chart-bars" id="chart"><div class="empty-tip">鍔犺浇涓?..</div></div>
+        </div>
+
+        <!-- 鍙嶉澶勭悊鐜?-->
+        <div class="card" style="flex:1;">
+          <div class="card-title">鍙嶉澶勭悊鎯呭喌</div>
+          <div id="feedbackBlock"><div class="empty-tip">鍔犺浇涓?..</div></div>
+        </div>
+      </div>
+
+      <!-- 鍒嗙被缁熻琛ㄦ牸 -->
+      <div class="card">
+        <div class="card-title">鍒嗙被缁熻鏄庣粏</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>鍒嗙被</th>
+                <th style="width:120px;">鐗╁搧鏁伴噺</th>
+                <th style="width:200px;">鍗犳瘮</th>
+              </tr>
+            </thead>
+            <tbody id="statTable"><tr><td colspan="3" class="empty-tip">鍔犺浇涓?..</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    if (!checkAuth()) return
+
+    // 鍔犺浇缁熻鏁版嵁
+    async function loadStats() {
+      const r = await callFunction('adminGetStats')
+      if (handleCode(r)) return
+      if (r.code !== 0) return
+
+      const d = r.data
+      // 姒傝
+      document.getElementById('goodsTotal').textContent = d.goodsTotal
+      document.getElementById('feedbackTotal').textContent = d.feedbackTotal
+      document.getElementById('feedbackHandled').textContent = d.feedbackHandled
+      document.getElementById('handleRate').textContent = d.handleRate + '%'
+
+      // 鏌辩姸鍥?      renderChart(d.categoryStats)
+      // 鍙嶉澶勭悊鐜囧尯鍧?      renderFeedback(d)
+      // 鏄庣粏琛?      renderTable(d.categoryStats, d.goodsTotal)
+    }
+
+    // CSS 鏌辩姸鍥?鎸夊垎绫婚厤鑹?
+    function renderChart(categoryStats) {
+      const el = document.getElementById('chart')
+      if (!categoryStats || categoryStats.length === 0) {
+        el.innerHTML = '<div class="empty-tip">鏆傛棤鏁版嵁</div>'
+        return
+      }
+      const colorMap = { '鍙洖鏀剁墿': '#3A86FF', '鍘ㄤ綑鍨冨溇': '#06D6A0', '鏈夊鍨冨溇': '#FF006E', '鍏朵粬鍨冨溇': '#495057' }
+      const max = Math.max(...categoryStats.map(s => s.count), 1)
+      el.innerHTML = categoryStats.map(s => {
+        const h = Math.max(4, Math.round(s.count / max * 170))
+        const color = colorMap[s.category] || '#27C48D'
+        return `
+          <div class="chart-bar-item">
+            <div class="chart-bar-num">${s.count}</div>
+            <div class="chart-bar-fill" style="height:${h}px;background:linear-gradient(180deg, ${color}, ${color}dd);"></div>
+            <div class="chart-bar-label">${s.category}</div>
+          </div>`
+      }).join('')
+    }
+
+    // 鍙嶉澶勭悊鐜囧尯鍧?    function renderFeedback(d) {
+      const el = document.getElementById('feedbackBlock')
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-soft);margin-top:8px;">
+          <span>宸插鐞?${d.feedbackHandled} / 鍏?${d.feedbackTotal} 鏉?/span>
+          <span style="color:var(--primary);font-weight:600;">${d.handleRate}%</span>
+        </div>
+        <div class="progress"><div class="progress-fill" style="width:${d.handleRate}%"></div></div>
+        <div style="margin-top:20px;font-size:13px;color:var(--text-muted);line-height:1.8;">
+          <div>路 鍙嶉澶勭悊鐜?= 宸插鐞嗗弽棣?梅 鍙嶉鎬绘暟</div>
+          <div>路 鍙湪銆屽弽棣堢鐞嗐€嶉〉鏍囪鍙嶉澶勭悊鐘舵€?/div>
+        </div>`
+    }
+
+    // 鍒嗙被缁熻鏄庣粏琛?    function renderTable(categoryStats, total) {
+      const tbody = document.getElementById('statTable')
+      if (!categoryStats || categoryStats.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="empty-tip">鏆傛棤鏁版嵁</td></tr>'
+        return
+      }
+      const colorMap = { '鍙洖鏀剁墿': '#3A86FF', '鍘ㄤ綑鍨冨溇': '#06D6A0', '鏈夊鍨冨溇': '#FF006E', '鍏朵粬鍨冨溇': '#495057' }
+      tbody.innerHTML = categoryStats.map(s => {
+        const percent = total ? Math.round(s.count / total * 100) : 0
+        const color = colorMap[s.category] || '#27C48D'
+        return `
+        <tr>
+          <td><span class="tag-cat" style="background:${color}22;color:${color}">${s.category}</span></td>
+          <td>${s.count}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="progress" style="flex:1;margin:0;"><div class="progress-fill" style="width:${percent}%;background:${color}"></div></div>
+              <span style="font-size:13px;color:var(--text-soft);">${percent}%</span>
+            </div>
+          </td>
+        </tr>`
+      }).join('')
+    }
+
+    loadStats()
+  </script>
+</body>
+</html>

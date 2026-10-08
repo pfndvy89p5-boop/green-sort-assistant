@@ -1,0 +1,9 @@
+{
+  "name": "getQueryHistory",
+  "version": "1.0.0",
+  "description": "获取当前用户查询历史记录",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

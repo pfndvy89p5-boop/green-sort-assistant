@@ -1,0 +1,72 @@
+<!-- 文字查询页 -->
+<view class="page" bindtap="hideSuggest">
+  <!-- 顶部导航栏（黑底 + 标题 + 返回按钮） -->
+  <view class="top-bar" style="padding-top:{{safeTop}}px;">
+    <view class="top-bar-inner" style="padding-right:{{safeRight}}px;">
+      <view class="nav-back-inline" hover-class="press-fade" catchtap="goBack">
+        <image class="bi-icon" src="{{icons.LIME.arrowLeft}}" style="width:28rpx;height:28rpx" />
+      </view>
+      <text class="top-bar-title">搜索</text>
+    </view>
+  </view>
+  <view class="search-box {{focused?'focused':''}}">
+    <image class="bi-icon" src="{{icons.BLACK.search}}" style="width:32rpx;height:32rpx" />
+    <input class="search-input" placeholder="输入垃圾名称查询"
+           value="{{key}}" bindinput="inputKey" focus="{{autoFocus}}"
+           confirm-type="search" bindconfirm="doSearch"
+           bindfocus="onFocus" bindblur="onBlur"/>
+    <view class="clear-btn" wx:if="{{key}}" hover-class="press-fade" catchtap="clearKey">×</view>
+    <view class="search-btn" hover-class="press-fade" catchtap="doSearch">搜索</view>
+  </view>
+
+  <!-- 输入联想下拉 -->
+  <view class="suggest-wrap" wx:if="{{showSuggest}}" style="left:32rpx; right:32rpx;">
+    <view wx:for="{{suggestList}}" wx:key="name" class="suggest-item" hover-class="press-fade" catchtap="tapSuggest" data-name="{{item.name}}">
+      <text class="suggest-emoji">{{item.itemEmoji}}</text>
+      <text class="suggest-name">{{item.name}}</text>
+      <text class="suggest-cat" style="color:{{item.color}}">{{item.categoryName}}</text>
+    </view>
+  </view>
+
+  <!-- 联想隐藏时显示快速查询和历史 -->
+  <block wx:if="{{!showSuggest}}">
+
+    <!-- 快速查询 -->
+    <view class="quick-section">
+      <view class="quick-title">快速查询</view>
+      <view class="quick-tags">
+        <view wx:for="{{quickList}}" wx:key="*this" class="quick-tag" hover-class="press-fade" catchtap="searchHistory" data-name="{{item}}">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 🔥 热搜榜 -->
+    <view class="hot-section">
+      <view class="quick-title">热门搜索</view>
+      <view class="hot-list">
+        <view wx:for="{{hotList}}" wx:key="name" class="hot-item" hover-class="press-fade" catchtap="searchHistory" data-name="{{item.name}}">
+          <text class="hot-rank {{index<3?'top':''}}">{{index+1}}</text>
+          <text class="hot-name">{{item.name}}</text>
+          <text class="hot-trend">{{item.trend}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="history-wrap" wx:if="{{historyList.length>0}}">
+      <view class="history-title-row">
+        <view class="history-title">最近搜索</view>
+        <text class="clear-history" hover-class="press-fade" catchtap="clearHistory">清空</text>
+      </view>
+      <view class="history-tags">
+        <view wx:for="{{historyList}}" wx:key="index" class="history-tag" hover-class="press-fade" catchtap="searchHistory" data-name="{{item}}">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="empty-tip" wx:if="{{!historyList.length}}">
+      <text>开始你的垃圾分类之旅</text>
+    </view>
+
+    <view class="foot-tip">
+      <text>不知道是什么？ 拍照问 AI →</text>
+    </view>
+  </block>
+</view>

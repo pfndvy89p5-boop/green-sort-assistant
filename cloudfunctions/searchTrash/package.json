@@ -1,0 +1,9 @@
+{
+  "name": "searchTrash",
+  "version": "1.0.0",
+  "description": "关键词查询接口（trash_data）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

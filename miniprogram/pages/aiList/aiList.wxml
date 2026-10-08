@@ -1,0 +1,39 @@
+<!-- AI 识别候选列表页(自定义返回按钮) -->
+<view class="page">
+  <view class="nav-back" style="top:{{safeTop + 8}}px" hover-class="press-fade" bindtap="goBack">
+    <image class="bi-icon" src="{{icons.BLACK.arrowLeft}}" style="width:36rpx;height:36rpx" />
+  </view>
+
+  <!-- 顶部头图,延伸到状态栏 -->
+  <view class="hero" style="padding-top:{{safeTop + 16}}px">
+    <image class="bi-icon" src="{{icons.BLACK.camera}}" style="width:88rpx;height:88rpx" />
+    <view class="hero-text">
+      <text class="nav-title">AI 识别结果</text>
+      <text class="nav-sub">识别到 {{list.length}} 个候选 · 点击查看分类</text>
+    </view>
+  </view>
+
+  <!-- 候选列表 -->
+  <view class="list-wrap">
+    <view wx:for="{{list}}" wx:key="name" class="cand-card" hover-class="press-fade" bindtap="openDetail" data-item="{{item}}">
+      <view class="cand-icon" style="background:{{item.bgColor}}">
+        <text class="cand-emoji">{{item.itemEmoji || item.catEmoji}}</text>
+      </view>
+      <view class="cand-info">
+        <view class="cand-head">
+          <text class="cand-name">{{item.name}}</text>
+          <text class="cand-score">{{item.aiScore}}%</text>
+        </view>
+        <view class="cand-bar">
+          <view class="cand-bar-fill" style="width:{{item.aiScore}}%;background:{{item.color}}"></view>
+        </view>
+        <text class="cand-desc">{{item.desc}}</text>
+      </view>
+      <text class="cand-tag" style="background:{{item.bgColor}};color:{{item.color}}">{{item.categoryName}}</text>
+    </view>
+  </view>
+
+  <view class="retake-tip">
+    <text>不是想要的?返回重拍即可</text>
+  </view>
+</view>

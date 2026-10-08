@@ -1,0 +1,134 @@
+<!-- 个人中心页 —— 用户头像昵称 + 积分 + 历史 -->
+<view class="page">
+  <!-- 用户区:未设置时提示登录,已设置显示真实头像 -->
+  <view class="user-card" style="padding-top:{{safeTop + 16}}px">
+    <view class="avatar-box">
+      <!-- 头像填写组件:用户点击可从微信头像/相册/相机选取 -->
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar-img" wx:if="{{userInfo.avatarUrl}}" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+        <image class="bi-icon" wx:else src="{{icons.LIME.user}}" style="width:72rpx;height:72rpx" />
+      </button>
+      <view class="avatar-ring"></view>
+    </view>
+    <!-- 昵称填写:点一下自动弹微信昵称,填完锁死不可改 -->
+    <input
+      class="nickname-input {{userInfo.nickName ? 'is-locked' : ''}}"
+      type="nickname"
+      placeholder="点我用微信昵称"
+      placeholder-class="nickname-ph"
+      value="{{userInfo.nickName}}"
+      disabled="{{!!userInfo.nickName}}"
+      bindblur="onNickNameInput"
+      bindconfirm="onNickNameInput"
+    />
+    <view class="locked-tip" wx:if="{{userInfo.nickName}}">微信昵称 🔒</view>
+    <view class="points-badge" hover-class="press-fade" bindtap="tapPointsBadge">
+      <text class="points-num">{{points}}</text>
+      <text class="points-label">积分</text>
+    </view>
+  </view>
+
+  <!-- 精简菜单 3 项 -->
+  <view class="menu-list">
+    <view class="menu-item" hover-class="press-fade" bindtap="goCollect">
+      <view class="menu-left">
+        <view class="menu-icon-box" style="background:#FF006E">
+          <image class="bi-icon" src="{{icons.WHITE.starFilled}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <text class="menu-text">我的收藏</text>
+      </view>
+      <view class="arrow">></view>
+    </view>
+    <view class="menu-item" hover-class="press-fade" bindtap="goSetting">
+      <view class="menu-left">
+        <view class="menu-icon-box">
+          <image class="bi-icon" src="{{icons.BLACK.settings}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <text class="menu-text">设置</text>
+      </view>
+      <view class="arrow">></view>
+    </view>
+    <view class="menu-item" hover-class="press-fade" bindtap="goFeedback">
+      <view class="menu-left">
+        <view class="menu-icon-box" style="background:#00D9FF">
+          <image class="bi-icon" src="{{icons.BLACK.chat}}" style="width:28rpx;height:28rpx" />
+        </view>
+        <text class="menu-text">意见反馈</text>
+      </view>
+      <view class="arrow">></view>
+    </view>
+  </view>
+
+  <!-- 签到卡片 -->
+  <view class="checkin-card">
+    <view class="checkin-head">
+      <text class="checkin-title">每日签到</text>
+      <text class="checkin-streak" wx:if="{{checkInStatus.streak > 0}}">连续 {{checkInStatus.streak}} 天</text>
+    </view>
+    <!-- 签到按钮 -->
+    <button
+      class="checkin-btn {{checkInStatus.todaySigned ? 'is-signed' : ''}}"
+      disabled="{{checkInStatus.todaySigned || checkInLoading}}"
+      bindtap="doCheckIn"
+    >
+      <text wx:if="{{checkInLoading}}">签到中...</text>
+      <text wx:elif="{{checkInStatus.todaySigned}}">✓ 今日已签 +5</text>
+      <text wx:else>立即签到 +5</text>
+    </button>
+    <!-- 当月日历 -->
+    <view class="checkin-calendar" wx:if="{{checkInStatus.calendar.length > 0}}">
+      <view wx:for="{{checkInStatus.calendar}}" wx:key="day"
+            class="cal-cell {{item.signed ? 'is-signed' : ''}} {{item.isToday ? 'is-today' : ''}} {{item.isFuture ? 'is-future' : ''}}">
+        <text class="cal-day">{{item.day}}</text>
+        <text wx:if="{{item.signed}}" class="cal-dot">✓</text>
+      </view>
+    </view>
+    <view class="checkin-rewards">
+      <text class="reward-chip">连续3天 +10</text>
+      <text class="reward-chip">连续7天 +20</text>
+      <text class="reward-chip">连续30天 +50</text>
+    </view>
+  </view>
+
+  <!-- 数据统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <text class="stats-title">我的环保数据</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-num">{{stats.total}}</text>
+        <text class="stat-label">累计分类</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.camera}}</text>
+        <text class="stat-label">拍照识别</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.kg}}</text>
+        <text class="stat-label">减碳 kg</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.favorite}}</text>
+        <text class="stat-label">收藏条目</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近丢弃记录 -->
+  <view class="history-section" wx:if="{{historyList.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">最近丢弃记录</text>
+    </view>
+    <view class="history-list">
+      <view wx:for="{{historyList}}" wx:key="index" class="history-row" hover-class="press-fade" bindtap="tapHistory" data-name="{{item.name}}">
+        <text class="history-cat-tag {{item.category}}">{{item.category === 'recycle' ? '可回收' : item.category === 'kitchen' ? '厨余' : item.category === 'danger' ? '有害' : '其他'}}</text>
+        <view class="history-info">
+          <text class="history-name">{{item.name}}</text>
+          <text class="history-source">{{item.source === 'camera' ? '拍照识别' : '文字查询'}}</text>
+        </view>
+        <text class="history-arrow">></text>
+      </view>
+    </view>
+  </view>
+</view>

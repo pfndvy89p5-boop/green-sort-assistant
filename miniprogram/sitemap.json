@@ -1,0 +1,9 @@
+{
+  "desc": "绿分类助手 sitemap 配置",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

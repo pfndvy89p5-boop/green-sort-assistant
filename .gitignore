@@ -1,0 +1,27 @@
+# 微信开发者工具
+.project
+.idea
+.vscode/
+*.swp
+*.swo
+
+# 云函数依赖
+cloudfunctions/*/node_modules/
+cloudfunctions/*/package-lock.json
+
+# 小程序构建产物
+miniprogram_npm/
+node_modules/
+
+# 敏感信息（绝对不要提交）
+.env
+.env.local
+cloudfunctions/*/config.local.js
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*

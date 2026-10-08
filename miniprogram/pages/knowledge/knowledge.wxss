@@ -1,0 +1,195 @@
+/* Neo-Brutalist 知识库 */
+.page { padding: 0; background: #FFFFFF; padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); }
+
+/* ---------- 整个顶部 fixed 容器（一起滑入滑出） ---------- */
+.top-all {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  transition: transform 320ms cubic-bezier(.2,.9,.3,1.3),
+              opacity 220ms ease-out;
+}
+.top-all.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.top-all.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ---------- Hero:荧光绿纯色块(严格对齐首页风格) ---------- */
+.hero {
+  background: #CCFF00;
+  padding: 0 40rpx 24rpx;
+  border-bottom: 4rpx solid #000;
+  position: relative;
+  min-height: 180rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  box-shadow: 0 16rpx 0 0 #000;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 40rpx;
+  bottom: -20rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: #CCFF00;
+  border-right: 4rpx solid #000;
+  border-bottom: 4rpx solid #000;
+  transform: rotate(45deg);
+}
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.nav-title {
+  font-size: 48rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+}
+.nav-sub {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 顶部占位 spacer（高度随顶部一起收起/展开） */
+.list-spacer {
+  transition: height 320ms cubic-bezier(.2,.9,.3,1.3);
+}
+
+/* ---------- 分类筛选（在 top-all 内部,一起动） ---------- */
+.tag-scroll-wrap {
+  padding: 16rpx 24rpx;
+  background: #FFFFFF;
+  border-bottom: 4rpx solid #000;
+}
+.tag-scroll {
+  border: 4rpx solid #000;
+  background: #fff;
+  display: flex;
+}
+.tag-item {
+  flex: 1 1 0;             /* 5 个固定分类严格均分,填满整行 */
+  text-align: center;
+  padding: 12rpx 0;
+  font-size: 24rpx;
+  font-weight: 900;
+  background: #fff;
+  color: #000;
+  border-right: 2rpx solid #000;
+  box-shadow: none;       /* 分片控件内部不要阴影! */
+  margin-right: 0;
+  transition: background 0ms, color 0ms;  /* Brutal Snap 硬切 */
+}
+.tag-item:last-child { border-right: none; }
+
+/* 激活态:纯黑底 + 白字 + 粉色阴影(向外突出) */
+.tag-item.active {
+  background: #000 !important;
+  color: #ff006e !important;
+  box-shadow: 4rpx 0 0 0 #000, -4rpx 0 0 0 #000;  /* 左右黑边连接 */
+}
+.tag-item:active {
+  background: #FF006E !important;
+  color: #fff !important;
+  transition: none;
+}
+
+/* ---------- 列表 ---------- */
+.list-wrap { padding: 32rpx; }
+.trash-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  gap: 24rpx;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.trash-card:active {
+  box-shadow: none !important;
+  transform: translate(8rpx, 8rpx) !important;
+  background: #FF006E;
+  transition: none;
+}
+.trash-card:active .trash-name { color: #fff; }
+.trash-card:active .trash-desc { color: rgba(255,255,255,0.8); }
+.trash-icon {
+  width: 132rpx; height: 132rpx;
+  border: 4rpx solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.trash-emoji { font-size: 76rpx; }
+.trash-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+.trash-name {
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0;
+}
+.trash-desc {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #555;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.trash-tag {
+  padding: 10rpx 20rpx;
+  border: 4rpx solid #000;
+  font-size: 22rpx;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* 空状态 */
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  color: #555;
+  font-size: 28rpx;
+  font-weight: 500;
+  padding: 160rpx 0;
+}
+
+/* 加载中 */
+.loading-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  color: #555;
+  font-size: 28rpx;
+  font-weight: 500;
+  padding: 160rpx 0;
+}
+.loading-dot {
+  width: 44rpx; height: 44rpx;
+  border: 4rpx solid #000;
+  border-top-color: #FF006E;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

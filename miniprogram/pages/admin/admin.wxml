@@ -1,0 +1,127 @@
+<view class="admin-page">
+  <!-- 顶部导航（标题+退出，避开胶囊） -->
+  <view class="admin-nav" style="padding-top:{{safeTop}}px;">
+    <view class="nav-bar" style="padding-right:{{safeRight}}px;">
+      <text class="nav-title">管理员后台</text>
+      <text class="nav-exit" bindtap="logout">退出</text>
+    </view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tab-bar">
+    <text class="tab-item {{tab==='dashboard'?'active':''}}" data-tab="dashboard" bindtap="switchTab">大盘</text>
+    <text class="tab-item {{tab==='users'?'active':''}}" data-tab="users" bindtap="switchTab">用户</text>
+    <text class="tab-item {{tab==='history'?'active':''}}" data-tab="history" bindtap="switchTab">丢弃</text>
+    <text class="tab-item {{tab==='points'?'active':''}}" data-tab="points" bindtap="switchTab">积分</text>
+    <text class="tab-item {{tab==='goods'?'active':''}}" data-tab="goods" bindtap="switchTab">物品</text>
+    <text class="tab-item {{tab==='feedback'?'active':''}}" data-tab="feedback" bindtap="switchTab">反馈</text>
+  </view>
+
+  <!-- Dashboard -->
+  <view class="admin-body" wx:if="{{tab==='dashboard'}}">
+    <view class="stat-grid">
+      <view class="stat-card">
+        <text class="stat-num">{{dashboard.goodsCount||0}}</text>
+        <text class="stat-label">物品总数</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{dashboard.feedbackCount||0}}</text>
+        <text class="stat-label">反馈总数</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{dashboard.pendingCount||0}}</text>
+        <text class="stat-label">待处理反馈</text>
+      </view>
+    </view>
+    <view class="card" wx:if="{{dashboard.latestFeedback && dashboard.latestFeedback.length}}">
+      <view class="card-head">最新反馈</view>
+      <view wx:for="{{dashboard.latestFeedback}}" wx:key="_id" class="list-row">
+        <text class="list-name">{{item.content}}</text>
+        <text class="list-time">{{item.createTime}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Users -->
+  <view class="admin-body" wx:if="{{tab==='users'}}">
+    <view class="card" wx:for="{{users}}" wx:for-item="u" wx:key="openid">
+      <view class="user-row">
+        <image class="admin-avatar" src="{{u.avatarUrl}}" wx:if="{{u.avatarUrl}}" />
+        <view class="admin-avatar placeholder" wx:else><image src="{{icons.BLACK.user}}" class="bi-icon" style="width:32rpx;height:32rpx" /></view>
+        <view class="user-info">
+          <text class="user-name">{{u.nickName}}</text>
+          <text class="user-id">{{u.openid}}</text>
+        </view>
+      </view>
+      <view class="user-stats">
+        <text class="chip">历史 {{u.historyCount}}</text>
+        <text class="chip">拍照 {{u.cameraCount}}</text>
+        <text class="chip">积分 {{u.totalPoints}}</text>
+        <text class="chip">收藏 {{u.favoriteCount}}</text>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!users.length}}">暂无用户数据</view>
+  </view>
+
+  <!-- History -->
+  <view class="admin-body" wx:if="{{tab==='history'}}">
+    <view class="card" wx:for="{{history.list}}" wx:key="_id">
+      <view class="hist-row">
+        <text class="hist-name">{{item.name}}</text>
+        <text class="hist-source">{{item.source==='camera'?'拍照':'输入'}}</text>
+      </view>
+      <view class="hist-meta">
+        <text class="chip">{{item.category}}</text>
+        <text class="chip time">{{item.createTime}}</text>
+      </view>
+    </view>
+    <view class="pager" wx:if="{{history.totalPages > 1}}">
+      <text class="page-btn" bindtap="prevPage">上一页</text>
+      <text class="page-info">{{history.page}} / {{history.totalPages}}</text>
+      <text class="page-btn" bindtap="nextPage">下一页</text>
+    </view>
+  </view>
+
+  <!-- Points -->
+  <view class="admin-body" wx:if="{{tab==='points'}}">
+    <view class="card-head">🏆 积分排行榜 TOP 20</view>
+    <view class="card" wx:for="{{ranking}}" wx:key="openid">
+      <view class="rank-row">
+        <text class="rank-no">{{index+1}}</text>
+        <text class="rank-openid">{{item.openid}}</text>
+        <text class="rank-pts">{{item.total}} 分</text>
+      </view>
+      <view class="rank-sub">
+        query={{item.query}} / identify={{item.identify}} / collect={{item.collect}} / checkin={{item.checkin}} / quiz={{item.quiz}}
+      </view>
+    </view>
+  </view>
+
+  <!-- Goods -->
+  <view class="admin-body" wx:if="{{tab==='goods'}}">
+    <view class="card" wx:for="{{goods.list}}" wx:key="_id">
+      <view class="goods-row">
+        <text class="goods-name">{{item.name}}</text>
+        <text class="goods-cat">{{item.categoryName || item.category}}</text>
+        <text class="goods-del" data-id="{{item._id}}" data-name="{{item.name}}" catchtap="quickDeleteGood">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Feedback -->
+  <view class="admin-body" wx:if="{{tab==='feedback'}}">
+    <view class="card" wx:for="{{feedback.list}}" wx:key="_id">
+      <text class="fb-content">{{item.content}}</text>
+      <view class="fb-row">
+        <text class="fb-time">{{item.createTime}}</text>
+        <text class="fb-status {{item.status==1?'done':'pending'}}">{{item.status==1?'已处理':'待处理'}}</text>
+      </view>
+      <view class="fb-actions">
+        <text class="fb-action" data-id="{{item._id}}" catchtap="resolveFeedback">标记已处理</text>
+        <text class="fb-action del" data-id="{{item._id}}" catchtap="deleteFeedback">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="loading-mask" wx:if="{{loading}}">加载中...</view>
+</view>

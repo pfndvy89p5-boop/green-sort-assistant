@@ -1,0 +1,54 @@
+<!-- 知识库页 -->
+<view class="page">
+
+  <!-- ============ 整个顶部固定容器（一起滑入滑出） ============ -->
+  <view class="top-all {{showTopBar?'show':'hide'}}">
+
+    <!-- 荧光绿 hero 充满顶部 -->
+    <view class="hero" style="padding-top:{{safeTop + 16}}px; padding-right:{{safeRight + 40}}rpx;">
+      <image class="bi-icon" src="{{icons.BLACK.book}}" style="width:96rpx;height:96rpx" />
+      <view class="hero-text">
+        <text class="nav-title">知识库</text>
+        <text class="nav-sub">四大分类 · 一查便知</text>
+      </view>
+    </view>
+
+    <!-- 分类筛选 -->
+    <view class="tag-scroll-wrap">
+      <view class="tag-scroll">
+        <view class="tag-item {{activeCat==''?'active':''}}" hover-class="press-fade" bindtap="switchCat" data-cat="">全部</view>
+        <view wx:for="{{catList}}" wx:key="index"
+              class="tag-item {{activeCat==item.cat?'active':''}}"
+              hover-class="press-fade" bindtap="switchCat" data-cat="{{item.cat}}">{{item.name}}</view>
+      </view>
+    </view>
+
+  </view>
+  <!-- ============ 顶部固定容器 END ============ -->
+
+  <!-- 列表区：spacer 随顶部一起收起/展开 -->
+  <view class="list-spacer" style="height:{{spacerHeight}}px"></view>
+
+  <view class="list-wrap" wx:if="{{trashList.length>0}}">
+    <view wx:for="{{trashList}}" wx:key="_id" class="trash-card" hover-class="press-fade" bindtap="openDetail" data-item="{{item}}">
+      <view class="trash-icon" style="background:{{item.bgColor}}">
+        <text class="trash-emoji">{{item.itemEmoji || item.catEmoji}}</text>
+      </view>
+      <view class="trash-info">
+        <text class="trash-name">{{item.name}}</text>
+        <text class="trash-desc">{{item.desc}}</text>
+      </view>
+      <text class="trash-tag" style="background:{{item.bgColor}};color:{{item.color}}">{{item.categoryName}}</text>
+    </view>
+  </view>
+
+  <view class="loading-tip" wx:elif="{{loading}}">
+    <view class="loading-dot"></view>
+    <text>加载中...</text>
+  </view>
+
+  <view class="empty-tip" wx:else>
+    <image class="bi-icon" src="{{icons.BLACK.book}}" style="width:80rpx;height:80rpx;opacity:0.35" />
+    <view>暂无垃圾分类数据</view>
+  </view>
+</view>

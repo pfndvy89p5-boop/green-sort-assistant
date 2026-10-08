@@ -1,0 +1,63 @@
+<!-- 拍照识别页(全屏相机 + 自定义返回 + 定格预览) -->
+<view class="page">
+  <!-- Brutalist 返回按钮(浮在相机/预览上) -->
+  <view class="cam-back" style="top:{{safeTop + 8}}px" hover-class="press-fade" bindtap="goBack">
+    <image class="bi-icon" src="{{icons.BLACK.arrowLeft}}" style="width:36rpx;height:36rpx" />
+  </view>
+
+  <view class="cam-box">
+    <!-- 相机不可用时的降级提示 -->
+    <view class="cam-fallback" wx:if="{{camError}}">
+      <image class="bi-icon" src="{{icons.BLACK.camera}}" style="width:96rpx;height:96rpx;opacity:0.4" />
+      <text class="cam-fallback-text">相机不可用</text>
+      <text class="cam-fallback-sub">请检查相机权限或从相册选择图片</text>
+      <view class="cam-btn album-btn-fallback" hover-class="press-fade" bindtap="chooseFromAlbum">从相册选择</view>
+    </view>
+
+    <!-- 实时相机(始终存在,识别失败或重拍时才可见) -->
+    <camera class="camera" device-position="back" flash="off" binderror="error"></camera>
+
+    <!-- 定格预览层(有照片时盖在相机上,让用户看到"已定格"而不是实时预览) -->
+    <image
+      wx:if="{{previewPath}}"
+      class="cam-preview"
+      src="{{previewPath}}"
+      mode="aspectFill" />
+
+    <!-- 取景框(只有没有定格时才显示) -->
+    <view class="cam-mask" wx:if="{{!previewPath && !camError}}">
+      <view class="cam-frame"></view>
+      <text class="cam-frame-tip">将物品放入框内</text>
+    </view>
+
+    <!-- 识别中遮罩(有照片 + loading 时盖在预览图上) -->
+    <view class="cam-loading" wx:if="{{loading}}">
+      <view class="cam-spinner"></view>
+      <text class="cam-loading-text">AI 识别中...</text>
+    </view>
+
+    <!-- 底部按钮区 -->
+    <view class="cam-controls" wx:if="{{!camError}}">
+      <!-- 实时预览态:拍照 + 相册 -->
+      <block wx:if="{{!previewPath}}">
+        <view class="cam-btn" hover-class="press-fade" bindtap="takePhoto">
+          <image class="bi-icon" src="{{icons.BLACK.camera}}" style="width:44rpx;height:44rpx" />
+          <text>拍照识别</text>
+        </view>
+        <view class="album-btn" hover-class="press-fade" bindtap="chooseFromAlbum">从相册选择</view>
+        <view class="cam-tip">将物品放入取景框内,点击拍照识别</view>
+      </block>
+
+      <!-- 定格态(识别失败可重拍):重拍 + 相册 -->
+      <block wx:else>
+        <view class="cam-btn cam-btn-retake" hover-class="press-fade" bindtap="retake">
+          <image class="bi-icon" src="{{icons.WHITE.camera}}" style="width:44rpx;height:44rpx" />
+          <text>{{loading?'正在识别...':'重拍'}}</text>
+        </view>
+        <view class="album-btn" hover-class="press-fade" bindtap="chooseFromAlbum">换一张图片</view>
+        <view class="cam-tip" wx:if="{{!loading}}">识别失败?调整角度或换个物体试试</view>
+        <view class="cam-tip" wx:if="{{loading}}">AI 正在分析图片,请稍候...</view>
+      </block>
+    </view>
+  </view>
+</view>

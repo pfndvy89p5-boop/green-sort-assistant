@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鐗╁搧绠＄悊 路 缁垮垎绫诲姪鎵嬬鐞嗗悗鍙?/title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo"><span class="logo-mark">缁?/span> 缁垮垎绫诲姪鎵?/div>
+      <nav>
+        <a href="index.html"><span class="nav-icon">馃搳</span> 鎺у埗鍙?/a>
+        <a href="goods.html" class="active"><span class="nav-icon">馃摝</span> 鐗╁搧绠＄悊</a>
+        <a href="feedback.html"><span class="nav-icon">馃挰</span> 鍙嶉绠＄悊</a>
+        <a href="stats.html"><span class="nav-icon">馃搱</span> 鏁版嵁缁熻</a>
+      </nav>
+      <div class="logout" onclick="logout()">閫€鍑虹櫥褰?/div>
+    </aside>
+    <main class="main">
+      <div class="page-title">鍨冨溇鐗╁搧绠＄悊</div>
+      <!-- 宸ュ叿鏍忥細鎼滅储 + 鏂板 -->
+      <div class="card">
+        <div class="toolbar">
+          <input class="input" id="keyword" placeholder="鎸夊悕绉版悳绱㈠瀮鍦剧墿鍝?..">
+          <button class="btn btn-primary" onclick="search()">鎼滅储</button>
+          <button class="btn btn-primary" onclick="openAddModal()" style="margin-left:auto;">锛?鏂板鐗╁搧</button>
+        </div>
+        <!-- 鍒楄〃 -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:60px;">搴忓彿</th>
+                <th>鍚嶇О</th>
+                <th>鍒嗙被</th>
+                <th>璇存槑</th>
+                <th>鎶曟斁鎻愮ず</th>
+                <th style="width:150px;">鎿嶄綔</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"><tr><td colspan="6" class="empty-tip">鍔犺浇涓?..</td></tr></tbody>
+          </table>
+        </div>
+        <!-- 鍒嗛〉 -->
+        <div class="pagination">
+          <span class="page-info" id="pageInfo">鍏?0 鏉?/span>
+          <button class="btn btn-outline btn-sm" onclick="prevPage()">涓婁竴椤?/button>
+          <span class="page-info" id="pageNow">绗?1 椤?/span>
+          <button class="btn btn-outline btn-sm" onclick="nextPage()">涓嬩竴椤?/button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- 鏂板/缂栬緫寮圭獥 -->
+  <div class="modal-mask" id="modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-title" id="modalTitle">鏂板鐗╁搧</div>
+      <input type="hidden" id="editId">
+      <div class="form-group">
+        <label>鍨冨溇鍚嶇О *</label>
+        <input class="input" id="fName" placeholder="濡傦細鐭挎硥姘寸摱">
+      </div>
+      <div class="form-group">
+        <label>鍒嗙被 *</label>
+        <select class="input" id="fCategory">
+          <option value="recycle">鍙洖鏀剁墿</option>
+          <option value="kitchen">鍘ㄤ綑鍨冨溇</option>
+          <option value="danger">鏈夊鍨冨溇</option>
+          <option value="other">鍏朵粬鍨冨溇</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>璇存槑</label>
+        <input class="input" id="fDesc" placeholder="鐗╁搧绠€瑕佽鏄?>
+      </div>
+      <div class="form-group">
+        <label>鎶曟斁鎻愮ず</label>
+        <input class="input" id="fTip" placeholder="濡傦細鍊掔┖鍘嬫墎鍚庢姇鏀?>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">鍙栨秷</button>
+        <button class="btn btn-primary" onclick="saveGoods()">淇濆瓨</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    (async function () {
+      if (!checkAuth()) return;
+      let page = 1
+      let pageSize = 10
+      let total = 0
+      let editingId = null
+      // 鍔犺浇鍒楄〃
+      async function loadList() {
+        const keyword = document.getElementById('keyword').value.trim()
+        const r = await callFunction('adminGetGoodsList', { keyword, page, pageSize })
+        if (handleCode(r)) return
+        if (r.code !== 0) { showListError(r.msg); return }
+        total = r.data.total
+        const list = r.data.list
+        window._goodsList = list
+        document.getElementById('pageInfo').textContent = '鍏?' + total + ' 鏉?
+        document.getElementById('pageNow').textContent = '绗?' + page + ' 椤?
+        const tbody = document.getElementById('tbody')
+        if (list.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="empty-tip">鏆傛棤鏁版嵁</td></tr>'
+          return
+        }
+        tbody.innerHTML = list.map((g, i) => {
+          const cat = catMeta(g.category)
+          return `
+        <tr>
+          <td>${(page - 1) * pageSize + i + 1}</td>
+          <td>${escapeHtml(g.name)}</td>
+          <td><span class="tag-cat" style="background:${cat.bg};color:${cat.color}">${escapeHtml(cat.name)}</span></td>
+          <td>${escapeHtml(g.desc || '-')}</td>
+          <td>${escapeHtml(g.tip || '-')}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="openEditModal('${g._id}')">缂栬緫</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteGoods('${g._id}', '${escapeHtml(g.name)}')">鍒犻櫎</button>
+          </td>
+        </tr>`
+        }).join('')
+      }
+      function showListError(msg) {
+        document.getElementById('tbody').innerHTML = '<tr><td colspan="6" class="empty-tip">' + (msg || '鍔犺浇澶辫触') + '</td></tr>'
+      }
+      // 鎼滅储 / 鍒嗛〉
+      function search() { page = 1; loadList() }
+      function prevPage() { if (page > 1) { page--; loadList() } }
+      function nextPage() { if (page * pageSize < total) { page++; loadList() } }
+      // 鏂板
+      function openAddModal() {
+        editingId = null
+        document.getElementById('modalTitle').textContent = '鏂板鐗╁搧'
+        document.getElementById('editId').value = ''
+        document.getElementById('fName').value = ''
+        document.getElementById('fCategory').value = '鍙洖鏀剁墿'
+        document.getElementById('fDesc').value = ''
+        document.getElementById('fTip').value = ''
+        document.getElementById('modal').style.display = 'flex'
+      }
+      // 缂栬緫
+      async function openEditModal(id) {
+        const rows = window._goodsList || []
+        const g = rows.find(x => x._id === id)
+        if (!g) { alert('鏈壘鍒拌鐗╁搧锛岃鍒锋柊'); return }
+        editingId = id
+        document.getElementById('modalTitle').textContent = '缂栬緫鐗╁搧'
+        document.getElementById('editId').value = id
+        document.getElementById('fName').value = g.name
+        document.getElementById('fCategory').value = g.category
+        document.getElementById('fDesc').value = g.desc || ''
+        document.getElementById('fTip').value = g.tip || ''
+        document.getElementById('modal').style.display = 'flex'
+      }
+      // 淇濆瓨锛堟柊澧?缂栬緫锛?      async function saveGoods() {
+        const name = document.getElementById('fName').value.trim()
+        const category = document.getElementById('fCategory').value
+        const desc = document.getElementById('fDesc').value.trim()
+        const tip = document.getElementById('fTip').value.trim()
+        if (!name || !category) { alert('鍚嶇О鍜屽垎绫讳笉鑳戒负绌?); return }
+        const data = { goods: { name, category, desc, tip } }
+        const r = editingId
+          ? await callFunction('adminUpdateGoods', Object.assign({ id: editingId }, data))
+          : await callFunction('adminAddGoods', data)
+        if (handleCode(r)) return
+        if (r.code === 0) {
+          closeModal()
+          loadList()
+        } else {
+          alert(r.msg || '鎿嶄綔澶辫触')
+        }
+      }
+      // 鍒犻櫎
+      async function deleteGoods(id, name) {
+        if (!confirm('纭畾鍒犻櫎銆? + name + '銆嶅悧锛?)) return
+        const r = await callFunction('adminDeleteGoods', { id })
+        if (handleCode(r)) return
+        if (r.code === 0) { loadList() } else { alert(r.msg || '鍒犻櫎澶辫触') }
+      }
+      function closeModal() { document.getElementById('modal').style.display = 'none' }
+      // HTML 杞箟,闃叉 XSS
+      function escapeHtml(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+      }
+
+      // 鍒嗙被鏄犲皠(鑻辨枃 key 鈫?涓枃鍚?+ 閰嶈壊)
+      function catMeta(cat) {
+        const map = {
+          recycle:  { name: '鍙洖鏀剁墿', color: '#3A86FF', bg: 'rgba(58, 134, 255, 0.18)' },
+          kitchen:  { name: '鍘ㄤ綑鍨冨溇', color: '#06D6A0', bg: 'rgba(6, 214, 160, 0.18)' },
+          danger:   { name: '鏈夊鍨冨溇', color: '#FF006E', bg: 'rgba(255, 0, 110, 0.18)' },
+          other:    { name: '鍏朵粬鍨冨溇', color: '#495057', bg: 'rgba(73, 80, 87, 0.14)' },
+          '鍙洖鏀剁墿': { name: '鍙洖鏀剁墿', color: '#3A86FF', bg: 'rgba(58, 134, 255, 0.18)' },
+          '鍘ㄤ綑鍨冨溇': { name: '鍘ㄤ綑鍨冨溇', color: '#06D6A0', bg: 'rgba(6, 214, 160, 0.18)' },
+          '鏈夊鍨冨溇': { name: '鏈夊鍨冨溇', color: '#FF006E', bg: 'rgba(255, 0, 110, 0.18)' },
+          '鍏朵粬鍨冨溇': { name: '鍏朵粬鍨冨溇', color: '#495057', bg: 'rgba(73, 80, 87, 0.14)' }
+        }
+        return map[cat] || { name: cat || '-', color: '#495057', bg: 'rgba(73, 80, 87, 0.14)' }
+      }
+
+      // ===== 鍏抽敭锛氭妸鎵€鏈?onclick 璋冪敤鐨勫嚱鏁版寕杞藉埌 window 鍏ㄥ眬 =====
+      window.openAddModal = openAddModal
+      window.openEditModal = openEditModal
+      window.saveGoods = saveGoods
+      window.deleteGoods = deleteGoods
+      window.closeModal = closeModal
+      window.search = search
+      window.prevPage = prevPage
+      window.nextPage = nextPage
+
+      loadList()
+    })();
+  </script>
+</body>
+</html>

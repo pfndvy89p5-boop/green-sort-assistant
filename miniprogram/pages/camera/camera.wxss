@@ -1,0 +1,193 @@
+/* Neo-Brutalist 拍照页 */
+.page { padding: 0; background: #000; }
+
+/* Brutalist 返回按钮(浮在黑色相机上) */
+.cam-back {
+  position: fixed;
+  left: 24rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background: #CCFF00;
+  border: 4rpx solid #000;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.cam-back:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+
+.cam-box {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background: #000;
+}
+.camera {
+  width: 100%;
+  height: 100%;
+}
+
+/* 相机不可用时的降级界面 */
+.cam-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+}
+.cam-fallback-text {
+  font-size: 36rpx;
+  font-weight: 900;
+  color: #CCFF00;
+  margin-top: 20rpx;
+}
+.cam-fallback-sub {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+.album-btn-fallback {
+  margin-top: 40rpx;
+  background: #CCFF00;
+  color: #000;
+}
+
+/* 定格预览层:拍照后盖在相机上,全屏 */
+.cam-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+/* 识别中遮罩(盖在预览图上):半透明黑底 + Brutalist 粗边框 loading 框 */
+.cam-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+  pointer-events: none;
+}
+.cam-spinner {
+  width: 72rpx;
+  height: 72rpx;
+  border: 6rpx solid #CCFF00;
+  border-top-color: transparent;
+  animation: camSpin 0.9s linear infinite;
+}
+@keyframes camSpin {
+  to { transform: rotate(360deg); }
+}
+.cam-loading-text {
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #CCFF00;
+  letter-spacing: 2rpx;
+}
+
+/* 重拍按钮反色主题(粉红底 + 黑字),区分"拍照"态 */
+.cam-btn-retake {
+  background: #FF006E;
+  color: #000;
+}
+.cam-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.cam-frame {
+  width: 500rpx; height: 500rpx;
+  border: 8rpx solid #CCFF00;
+}
+.cam-frame-tip {
+  margin-top: 28rpx;
+  color: #CCFF00;
+  font-size: 28rpx;
+  font-weight: 900;
+  letter-spacing: 2rpx;
+}
+
+.cam-controls {
+  position: absolute;
+  bottom: 100rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  pointer-events: auto;
+}
+.cam-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  width: 520rpx;
+  height: 112rpx;
+  background: #CCFF00;
+  color: #000;
+  border: 4rpx solid #000;
+  font-size: 34rpx;
+  font-weight: 900;
+  box-shadow: 24rpx 24rpx 0 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.cam-btn:active {
+  box-shadow: none !important;
+  transform: translate(24rpx, 24rpx) !important;
+  background: #FF006E;
+  color: #fff;
+  transition: none;
+}
+.cam-btn.disabled { opacity: 0.6; }
+.album-btn {
+  width: 520rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  background: #000;
+  color: #CCFF00;
+  border: 4rpx solid #CCFF00;
+  font-size: 28rpx;
+  font-weight: 900;
+  box-shadow: 12rpx 12rpx 0 0 #CCFF00;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.album-btn:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E;
+  color: #fff;
+  border-color: #FF006E;
+  transition: none;
+}
+.cam-tip {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24rpx;
+  font-weight: 500;
+  margin-top: 40rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+}

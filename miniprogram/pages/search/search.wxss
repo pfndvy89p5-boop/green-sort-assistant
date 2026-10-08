@@ -1,0 +1,260 @@
+/* Neo-Brutalist 搜索页 */
+.page { padding: 0; background: #FFFFFF; }
+
+/* 四分类快速入口网格 */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  padding: 24rpx 32rpx 0;
+}
+.cat-card {
+  height: 160rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8rpx;
+  border: 4rpx solid #000;
+  box-shadow: 10rpx 10rpx 0 #000;
+  transition: box-shadow 150ms, transform 150ms;
+}
+.cat-card:active {
+  box-shadow: none !important;
+  transform: translate(10rpx, 10rpx) !important;
+}
+.cat-emoji { font-size: 48rpx; }
+.cat-name { font-size: 26rpx; font-weight: 900; color: #fff; letter-spacing: 2rpx; }
+.cat-sub { font-size: 20rpx; font-weight: 700; color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.2); padding: 2rpx 12rpx; border-radius: 0; }
+
+.quick-section, .hot-section, .history-wrap {
+  padding: 48rpx 32rpx 0;
+}
+
+/* Brutalist 返回按钮 */
+.nav-back {
+  position: fixed;
+  left: 24rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 12rpx 12rpx 0 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.nav-back:active {
+  box-shadow: none !important;
+  transform: translate(12rpx, 12rpx) !important;
+  background: #FF006E !important;
+  transition: none;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  background: #fff;
+  border: 4rpx solid #000;
+  padding: 20rpx 24rpx;
+  margin: 20rpx 32rpx 0;
+  box-shadow: 8rpx 8rpx 0 #000;
+  transition: box-shadow 200ms ease-out;
+}
+.search-box.focused {
+  box-shadow: 2rpx 2rpx 0 #000;
+}
+.search-box:active {
+  box-shadow: none !important;
+  transform: translate(8rpx, 8rpx) !important;
+  transition: none;
+}
+.search-input {
+  flex: 1;
+  height: 72rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #000;
+}
+.clear-btn {
+  width: 48rpx; height: 48rpx;
+  line-height: 48rpx; text-align: center;
+  background: #F0F0F0;
+  color: #000;
+  border: 4rpx solid #000;
+  font-size: 28rpx;
+  flex-shrink: 0;
+  box-shadow: 4rpx 4rpx 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.clear-btn:active {
+  box-shadow: none !important;
+  transform: translate(4rpx, 4rpx) !important;
+  background: #FF006E;
+  color: #fff;
+  transition: none;
+}
+.search-btn {
+  padding: 0 36rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: #000;
+  color: #CCFF00;
+  border: 4rpx solid #000;
+  font-size: 28rpx;
+  font-weight: 900;
+  flex-shrink: 0;
+  box-shadow: 8rpx 8rpx 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.search-btn:active {
+  box-shadow: none !important;
+  transform: translate(8rpx, 8rpx) !important;
+  background: #FF006E;
+  color: #fff;
+  transition: none;
+}
+
+.quick-section, .history-wrap {
+  padding: 56rpx 32rpx 0;
+}
+.quick-title, .history-title {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #000;
+  margin-bottom: 20rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 4rpx solid #000;
+  display: inline-block;
+}
+.history-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.clear-history {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #FF006E;
+  padding: 4rpx 12rpx;
+}
+.empty-tip {
+  text-align: center;
+  color: #999;
+  font-size: 26rpx;
+  font-weight: 500;
+  padding: 80rpx 0;
+}
+
+/* 🔥 热搜榜 */
+.hot-list {
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 #000;
+}
+.hot-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 24rpx;
+  border-bottom: 3rpx solid #eee;
+  transition: background .15s;
+}
+.hot-item:last-child { border-bottom: none; }
+.hot-item:active { background: #FFE985; }
+.hot-rank {
+  width: 44rpx; height: 44rpx;
+  line-height: 44rpx; text-align: center;
+  font-size: 24rpx; font-weight: 900;
+  background: #eee; color: #666;
+  border: 2rpx solid #000;
+  flex-shrink: 0;
+}
+.hot-rank.top {
+  background: #FF006E; color: #fff;
+}
+.hot-name { flex: 1; font-size: 28rpx; font-weight: 700; color: #000; }
+.hot-trend { font-size: 24rpx; }
+
+/* 底部提示 */
+.foot-tip {
+  text-align: center;
+  padding: 40rpx 32rpx 80rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #666;
+}
+.quick-tags, .history-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.quick-tag {
+  padding: 16rpx 28rpx;
+  background: #CCFF00;
+  color: #000;
+  border: 4rpx solid #000;
+  font-size: 26rpx;
+  font-weight: 900;
+  box-shadow: 6rpx 6rpx 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.quick-tag:active {
+  box-shadow: none !important;
+  transform: translate(6rpx, 6rpx) !important;
+  background: #FF006E;
+  color: #fff;
+  transition: none;
+}
+.history-tag {
+  padding: 16rpx 28rpx;
+  background: #fff;
+  color: #000;
+  border: 4rpx solid #000;
+  font-size: 26rpx;
+  font-weight: 700;
+  box-shadow: 6rpx 6rpx 0 #000;
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+.history-tag:active {
+  box-shadow: none !important;
+  transform: translate(6rpx, 6rpx) !important;
+  background: #FF006E;
+  color: #fff;
+  transition: none;
+}
+
+/* 搜索联想下拉 */
+.suggest-wrap {
+  margin: 0 32rpx;
+  max-width: calc(100% - 64rpx);
+  background: #fff;
+  border: 4rpx solid #000;
+  box-shadow: 8rpx 8rpx 0 #000;
+  z-index: 50;
+  position: absolute;
+  left: 0;
+  right: 0;
+  animation: suggestIn 220ms cubic-bezier(.2,.9,.3,1.4);
+}
+@keyframes suggestIn {
+  from { opacity: 0; transform: translateY(-12rpx); box-shadow: 2rpx 2rpx 0 #000; }
+  to { opacity: 1; transform: translateY(0); box-shadow: 8rpx 8rpx 0 #000; }
+}
+.suggest-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx 28rpx;
+  border-bottom: 4rpx solid #000;
+}
+.suggest-item:last-child { border-bottom: none; }
+.suggest-item:active { background: #FF006E; }
+.suggest-item:active .suggest-name { color: #fff; }
+.suggest-item:active .suggest-cat { color: #fff !important; }
+.suggest-emoji { font-size: 40rpx; }
+.suggest-name { flex: 1; font-size: 28rpx; font-weight: 700; color: #000; }
+.suggest-cat { font-size: 22rpx; font-weight: 700; }

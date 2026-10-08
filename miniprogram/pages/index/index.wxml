@@ -1,0 +1,64 @@
+<!-- 首页 Neo-Brutalist —— 纯 SVG data URI 图标(零图片依赖) -->
+<view class="page">
+  <!-- Hero 区:纯装饰区,只放品牌 Logo,交互入口统一放下方功能卡片 -->
+  <view class="hero" style="padding-top:{{safeTop + 16}}px">
+    <view class="hero-row">
+      <view class="brand">
+        <view class="icon-badge-round">
+          <image class="bi-icon" src="{{icons.LIME.logo}}" style="width:36rpx;height:36rpx" />
+        </view>
+        <text class="title">BRUTAL<span class="dot">.</span></text>
+      </view>
+      <view style="width:56rpx"></view>
+    </view>
+    <view class="hero-title-block">
+      <text class="hero-big-title">让分类</text>
+      <text class="hero-big-title">更简单</text>
+      <text class="hero-big-sub">AI · 拍照 · <text style="color:#FF006E;">一秒炸裂</text></text>
+    </view>
+  </view>
+
+  <!-- Brutalist 搜索框(点击跳转独立搜索页) -->
+  <view class="search-box" bindtap="goText">
+    <image class="bi-icon" src="{{icons.BLACK.search}}" style="width:32rpx;height:32rpx" />
+    <text class="search-tip">拍照或输入物品查询垃圾分类 →</text>
+  </view>
+
+  <!-- 双 CTA -->
+  <view class="func-row">
+    <!-- 拍照:默认白底黑图标,按压变粉红 -->
+    <view class="func-card primary-card" bindtap="goCamera">
+      <image class="bi-icon" src="{{icons.BLACK.camera}}" style="width:56rpx;height:56rpx" />
+      <text class="func-text">拍照识别</text>
+      <text class="func-sub">AI 智能识别</text>
+    </view>
+    <!-- 查询:白底黑图标 -->
+    <view class="func-card normal-card" bindtap="goText">
+      <image class="bi-icon" src="{{icons.BLACK.search}}" style="width:56rpx;height:56rpx" />
+      <text class="func-text">文字查询</text>
+      <text class="func-sub">输入名称查询</text>
+    </view>
+  </view>
+
+  <!-- 四分类入口(与拍照识别卡同款设计语言:白底/居中/硬阴影/按压变粉压平) -->
+  <view class="section-title">四分类速查</view>
+  <view class="four-cat-row">
+    <view wx:for="{{categories}}" wx:key="cat"
+          class="cat-card"
+          bindtap="goCatList" data-cat="{{item.cat}}">
+      <image class="bi-icon" src="{{icons.BLACK[item.icon]}}" style="width:56rpx;height:56rpx" />
+      <text class="cat-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 最近查询 -->
+  <view class="recent-title">最近查询</view>
+  <view class="recent-list" wx:if="{{recentList.length>0}}">
+    <view wx:for="{{recentList}}" wx:key="index" class="recent-item" bindtap="searchHistory" data-name="{{item}}">
+      <view class="recent-dot"></view>
+      <text class="item-name">{{item}}</text>
+      <view class="arrow">></view>
+    </view>
+  </view>
+  <view class="empty-tip" wx:else>暂无查询记录</view>
+</view>

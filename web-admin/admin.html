@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🛠️ 绿分类助手 · 管理员后台</title>
+<style>
+  /* ===== Neo-Brutalist ===== */
+  :root {
+    --bg: #F6F6F6; --ink: #000; --paper: #fff;
+    --lime: #CCFF00; --pink: #FF006E; --blue: #3A86FF; --green: #06D6A0; --danger: #FF5733;
+    --shadow: 8px 8px 0 #000; --shadow-sm: 4px 4px 0 #000; --border: 3px solid #000;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: "PingFang SC","Helvetica Neue",system-ui,sans-serif; background: var(--bg); color: var(--ink); margin: 0; min-height: 100vh; }
+  a { color: var(--ink); }
+  .btn { display: inline-block; padding: 10px 22px; background: var(--ink); color: #fff; border: var(--border); box-shadow: var(--shadow-sm); font-weight: 700; font-size: 14px; cursor: pointer; transition: transform .08s; text-decoration: none; letter-spacing: 1px; }
+  .btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #000; }
+  .btn:active { transform: translate(4px,4px); box-shadow: none; }
+  .btn.lime { background: var(--lime); color: var(--ink); }
+  .btn.pink { background: var(--pink); color: #fff; }
+  .btn.blue { background: var(--blue); color: #fff; }
+  .btn.green { background: var(--green); color: #fff; }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .card { background: var(--paper); border: var(--border); box-shadow: var(--shadow); padding: 24px; margin-bottom: 24px; }
+  .card-title { font-size: 18px; font-weight: 900; letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 3px solid #000; text-transform: uppercase; }
+  .tag { display: inline-block; padding: 3px 10px; background: #fff; border: 2px solid #000; font-size: 12px; font-weight: 700; margin: 0 4px; }
+  .tag.blue { background: var(--blue); color: #fff; }
+  .tag.green { background: var(--green); color: #fff; }
+  .tag.pink { background: var(--pink); color: #fff; }
+  .tag.lime { background: var(--lime); color: #000; }
+  .tag.gray { background: #888; color: #fff; }
+
+  /* ===== Login ===== */
+  .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--lime); padding: 20px; }
+  .login-card { width: 420px; background: #fff; border: 4px solid #000; box-shadow: 12px 12px 0 #000; padding: 40px; }
+  .login-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; letter-spacing: 2px; }
+  .login-sub { font-size: 14px; color: #666; margin-bottom: 28px; }
+  .form-row { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .form-input { width: 100%; padding: 12px 14px; border: var(--border); font-size: 14px; font-family: inherit; background: #fff; outline: none; box-shadow: 4px 4px 0 #000; }
+  .form-input:focus { background: var(--lime); }
+  .login-btn { width: 100%; padding: 14px; font-size: 16px; }
+  .login-error { color: var(--pink); font-weight: 700; margin-top: 12px; font-size: 13px; }
+
+  /* ===== Layout ===== */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 240px; background: #000; color: var(--lime);
+    display: flex; flex-direction: column; padding: 24px 0; position: sticky; top: 0; height: 100vh;
+  }
+  .side-logo { font-size: 18px; font-weight: 900; padding: 0 24px 20px; letter-spacing: 2px; border-bottom: 3px solid var(--lime); margin-bottom: 20px; }
+  .side-item { padding: 14px 24px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .15s; border-left: 4px solid transparent; letter-spacing: 1px; }
+  .side-item:hover { background: #222; }
+  .side-item.active { background: var(--lime); color: #000; border-left-color: var(--pink); }
+  .side-footer { margin-top: auto; padding: 16px 24px; font-size: 12px; color: #666; border-top: 2px solid #333; }
+  .main { flex: 1; padding: 28px 36px; overflow-x: auto; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+  .topbar h1 { margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 2px; }
+  .topbar .user-info { font-size: 13px; font-weight: 700; }
+
+  /* ===== Table ===== */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 2px solid #000; }
+  th { background: var(--ink); color: var(--lime); font-weight: 800; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  tr:hover td { background: #FFFACD; }
+  td.openid { font-family: monospace; font-size: 12px; color: #555; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.mono { font-family: monospace; }
+
+  /* ===== Dashboard ===== */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 18px; margin-bottom: 24px; }
+  .stat { background: #fff; border: 4px solid #000; box-shadow: var(--shadow); padding: 20px; text-align: center; }
+  .stat-num { font-size: 44px; font-weight: 900; background: var(--lime); display: inline-block; padding: 4px 16px; border: 3px solid #000; letter-spacing: 1px; }
+  .stat-label { display: block; margin-top: 10px; font-size: 13px; font-weight: 700; color: #555; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ===== Ranking ===== */
+  .rank-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #000; color: var(--lime); font-weight: 900; border: 2px solid #000; font-size: 13px; }
+  .rank-num.top1 { background: var(--pink); color: #fff; }
+  .rank-num.top3 { background: var(--blue); color: #fff; }
+
+  /* ===== Misc ===== */
+  .empty { text-align: center; padding: 60px 20px; color: #999; font-weight: 600; }
+  .loading { text-align: center; padding: 40px; font-weight: 700; color: var(--blue); }
+  .actions { display: flex; gap: 8px; }
+  .mini-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; background: var(--ink); color: #fff; border: 2px solid #000; cursor: pointer; box-shadow: 2px 2px 0 #000; }
+  .mini-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #000; }
+  .mini-btn.danger { background: var(--pink); }
+  .mini-btn.lime { background: var(--lime); color: #000; }
+  .mini-btn.green { background: var(--green); }
+  .pagination { display: flex; justify-content: center; align-items: center; gap: 16px; padding: 20px 0; }
+  .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .filter-bar select, .filter-bar input { padding: 8px 12px; border: 3px solid #000; box-shadow: 3px 3px 0 #000; font-family: inherit; font-size: 13px; background: #fff; }
+  .avatar { width: 36px; height: 36px; border: 2px solid #000; background: var(--lime); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+  @media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; padding: 10px; }
+    .side-logo { display: none; }
+    .side-item { border-left: none; border-bottom: 3px solid transparent; white-space: nowrap; padding: 10px 16px; }
+    .main { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== LOGIN ====== -->
+<div id="loginView" class="login-wrap">
+  <div class="login-card">
+    <div class="login-title">🛠️ 管理员后台</div>
+    <div class="login-sub">绿分类助手 · 内部管理系统</div>
+    <div class="form-row">
+      <label class="form-label">API 网关地址</label>
+      <input id="apiBase" class="form-input" type="text" placeholder="https://xxx.service.tcloudbase.com/adminApiGateway" />
+      <div style="font-size:11px;color:#888;margin-top:4px;">在云开发控制台 → adminApiGateway → HTTP 触发 里复制 URL，填这里</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">账号</label>
+      <input id="username" class="form-input" type="text" value="admin" />
+    </div>
+    <div class="form-row">
+      <label class="form-label">密码</label>
+      <input id="password" class="form-input" type="password" placeholder="请输入管理员密码" />
+    </div>
+    <button class="btn lime login-btn" onclick="doLogin()">登 录</button>
+    <div id="loginErr" class="login-error"></div>
+  </div>
+</div>
+
+<!-- ====== MAIN ====== -->
+<div id="mainView" class="layout" style="display:none;">
+  <aside class="sidebar">
+    <div class="side-logo">🛠️ LFZ ADMIN</div>
+    <div class="side-item active" data-page="dashboard" onclick="switchPage('dashboard')">📊 大盘概览</div>
+    <div class="side-item" data-page="users" onclick="switchPage('users')">👥 用户列表</div>
+    <div class="side-item" data-page="history" onclick="switchPage('history')">📜 丢弃记录</div>
+    <div class="side-item" data-page="points" onclick="switchPage('points')">🏆 积分排行</div>
+    <div class="side-item" data-page="goods" onclick="switchPage('goods')">♻️ 物品管理</div>
+    <div class="side-item" data-page="feedback" onclick="switchPage('feedback')">💬 反馈处理</div>
+    <div class="side-footer">v1.0 · © LFZ · 2026</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">📊 大盘概览</h1>
+      <div class="user-info">
+        <span id="adminUser">admin</span>
+        <button class="btn ghost" style="padding:4px 12px;font-size:12px;margin-left:12px;" onclick="doLogout()">退出</button>
+      </div>
+    </div>
+    <div id="pageContent"></div>
+  </main>
+</div>
+
+<script>
+/* =========== 状态 =========== */
+let API_BASE = localStorage.getItem('apiBase') || ''
+let TOKEN = localStorage.getItem('adminToken') || ''
+const CATEGORY_NAME = { recycle: '可回收物', kitchen: '厨余垃圾', danger: '有害垃圾', other: '其他垃圾' }
+const CATEGORY_COLOR = { recycle: 'blue', kitchen: 'green', danger: 'pink', other: 'gray' }
+
+/* =========== HTTP =========== */
+async function api(action, params = {}) {
+  const url = API_BASE + '?action=' + encodeURIComponent(action) + '&token=' + encodeURIComponent(TOKEN)
+  const qs = Object.keys(params).map(k => '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('')
+  const res = await fetch(url + qs, { headers: { 'Content-Type': 'application/json' } })
+  if (res.status === 401) { doLogout(); throw new Error('未授权') }
+  const data = await res.json()
+  if (data.code === 401) { doLogout(); throw new Error('登录过期') }
+  return data
+}
+
+/* =========== 登录 =========== */
+async function doLogin() {
+  API_BASE = document.getElementById('apiBase').value.trim()
+  const username = document.getElementById('username').value.trim()
+  const password = document.getElementById('password').value
+  const errEl = document.getElementById('loginErr')
+  errEl.textContent = ''
+  if (!API_BASE) { errEl.textContent = '请填写 API 网关地址'; return }
+  if (!API_BASE.startsWith('http')) { errEl.textContent = 'API 地址必须以 http(s):// 开头'; return }
+  localStorage.setItem('apiBase', API_BASE)
+  try {
+    const r = await api('login', { username, password })
+    if (r.code === 0) {
+      TOKEN = r.data.token
+      localStorage.setItem('adminToken', TOKEN)
+      document.getElementById('adminUser').textContent = username
+      document.getElementById('loginView').style.display = 'none'
+      document.getElementById('mainView').style.display = 'flex'
+      switchPage('dashboard')
+    } else {
+      errEl.textContent = r.msg || '登录失败'
+    }
+  } catch (e) {
+    errEl.textContent = '网络错误：' + e.message
+  }
+}
+function doLogout() {
+  TOKEN = ''; localStorage.removeItem('adminToken')
+  document.getElementById('loginView').style.display = 'flex'
+  document.getElementById('mainView').style.display = 'none'
+}
+
+/* =========== 导航 =========== */
+const PAGES = {
+  dashboard: { title: '📊 大盘概览', render: renderDashboard },
+  users:     { title: '👥 用户列表', render: renderUsers },
+  history:   { title: '📜 丢弃记录', render: renderHistory },
+  points:    { title: '🏆 积分排行', render: renderPoints },
+  goods:     { title: '♻️ 物品管理', render: renderGoods },
+  feedback:  { title: '💬 反馈处理', render: renderFeedback }
+}
+let CURRENT_PAGE = 'dashboard'
+function switchPage(page) {
+  CURRENT_PAGE = page
+  document.querySelectorAll('.side-item').forEach(e => e.classList.toggle('active', e.dataset.page === page))
+  document.getElementById('pageTitle').textContent = PAGES[page].title
+  document.getElementById('pageContent').innerHTML = '<div class="loading">加载中...</div>'
+  PAGES[page].render()
+}
+
+/* =========== Dashboard =========== */
+async function renderDashboard() {
+  const data = (await api('dashboard')).data
+  const stats = (await api('stats')).data
+  const main = document.getElementById('pageContent')
+  const catKeys = Object.keys(stats)
+  main.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num">${data.goodsCount}</div><span class="stat-label">物品总数</span></div>
+      <div class="stat"><div class="stat-num">${data.feedbackCount}</div><span class="stat-label">反馈总数</span></div>
+      <div class="stat"><div class="stat-num">${data.pendingCount}</div><span class="stat-label">待处理反馈</span></div>
+      <div class="stat"><div class="stat-num">${catKeys.reduce((s,k)=>s+stats[k],0)}</div><span class="stat-label">库内分类合计</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📦 分类分布</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;">
+        ${catKeys.map(k => `<span class="tag ${CATEGORY_COLOR[k]||'gray'}">${CATEGORY_NAME[k]||k}: ${stats[k]}</span>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💬 最新反馈</div>
+      ${(data.latestFeedback||[]).length ? `
+        <table><thead><tr><th>内容</th><th>时间</th><th>状态</th></tr></thead><tbody>
+        ${data.latestFeedback.map(f => `<tr><td>${f.content||''}</td><td class="mono">${f.createTime||''}</td><td><span class="tag ${f.status===1?'lime':'pink'}">${f.status===1?'已处理':'待处理'}</span></td></tr>`).join('')}
+        </tbody></table>` : '<div class="empty">暂无反馈</div>'}
+    </div>
+  `
+}
+
+/* =========== Users =========== */
+async function renderUsers() {
+  const data = (await api('users')).data
+  const main = document.getElementById('pageContent')
+  main.innerHTML = `
+    <div class="card">
+      <div class="card-title">👥 全部用户 · 共 ${data.total} 人</div>
+      <table><thead><tr>
+        <th>头像</th><th>昵称</th><th>OpenID</th><th>历史</th><th>拍照</th><th>积分</th><th>收藏</th><th>最后活跃</th>
+      </tr></thead><tbody>
+      ${data.list.map(u => `<tr>
+        <td><div class="avatar">${u.avatarUrl?`<img src="${u.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">`:'👤'}</div></td>
+        <td><b>${u.nickName}</b></td>
+        <td class="openid">${u.openid}</td>
+        <td>${u.historyCount}</td>
+        <td>${u.cameraCount}</td>
+        <td><b style="color:var(--pink)">${u.totalPoints}</b></td>
+        <td>${u.favoriteCount}</td>
+        <td class="mono">${formatTime(u.lastActiveTime)}</td>
+      </tr>`).join('')}
+      </tbody></table>
+    </div>
+  `
+}
+
+/* =========== History =========== */
+async function renderHistory() {
+  const page = parseInt(document.getElementById('histPage')?.value || 1)
+  const source = document.getElementById('histSource')?.value || ''
+  const res = await api('history', { page, pageSize: 20, source })
+  const main = document.getElementById('pageContent')
+  main.innerHTML = `
+    <div class="card">
+      <div class="card-title">📜 全部丢弃/查询记录</div>
+      <div class="filter-bar">
+        <select id="histSource"><option value="">全部来源</option><option value="camera">📷 拍照</option><option value="text">✍️ 文字</option></select>
+        <button class="btn blue" onclick="renderHistory()">筛选</button>
+      </div>
+      <table><thead><tr>
+        <th>物品</th><th>分类</th><th>来源</th><th>OpenID</th><th>时间</th>
+      </tr></thead><tbody>
+      ${res.data.list.map(h => `<tr>
+        <td><b>${h.name}</b></td>
+        <td><span class="tag ${CATEGORY_COLOR[h.category]||'gray'}">${CATEGORY_NAME[h.category]||h.category}</span></td>
+        <td>${h.source==='camera'?'📷':'✍️'}</td>
+        <td class="openid">${h.openid||h._openid}</td>
+        <td class="mono">${formatTime(h.createTime)}</td>
+      </tr>`).join('')}
+      </tbody></table>
+      <div class="pagination">
+        <button class="btn" onclick="gotoHistPage(${res.data.page-1})" ${res.data.page<=1?'disabled':''}>上一页</button>
+        <span>${res.data.page} / ${res.data.totalPages}</span>
+        <button class="btn" onclick="gotoHistPage(${res.data.page+1})" ${res.data.page>=res.data.totalPages?'disabled':''}>下一页</button>
+      </div>
+      <input type="hidden" id="histPage" value="${res.data.page}" />
+    </div>
+  `
+  if (source) document.getElementById('histSource').value = source
+}
+function gotoHistPage(n) { document.getElementById('histPage').value = n; renderHistory() }
+
+/* =========== Points =========== */
+async function renderPoints() {
+  const data = (await api('points')).data
+  const main = document.getElementById('pageContent')
+  main.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num">${data.totalFlows}</div><span class="stat-label">积分流水总数</span></div>
+      <div class="stat"><div class="stat-num">${data.userCount}</div><span class="stat-label">累计获积分用户</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏆 积分排行榜 TOP 50</div>
+      <table><thead><tr>
+        <th>#</th><th>OpenID</th><th>总分</th><th>query</th><th>identify</th><th>collect</th><th>checkin</th><th>quiz</th>
+      </tr></thead><tbody>
+      ${data.ranking.map((u,i) => `<tr>
+        <td><span class="rank-num ${i===0?'top1':i<3?'top3':''}">${i+1}</span></td>
+        <td class="openid">${u.openid}</td>
+        <td><b style="color:var(--pink);font-size:16px;">${u.total}</b></td>
+        <td>${u.query}</td><td>${u.identify}</td><td>${u.collect}</td><td>${u.checkin}</td><td>${u.quiz||0}</td>
+      </tr>`).join('')}
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-title">💧 最新 100 条积分流水</div>
+      <table><thead><tr><th>OpenID</th><th>Action</th><th>积分</th><th>时间</th></tr></thead><tbody>
+      ${data.latestFlows.map(f => `<tr>
+        <td class="openid">${f.openid}</td>
+        <td><span class="tag lime">${f.action}</span></td>
+        <td><b>+${f.points}</b></td>
+        <td class="mono">${formatTime(f.createTime)}</td>
+      </tr>`).join('')}
+      </tbody></table>
+    </div>
+  `
+}
+
+/* =========== Goods =========== */
+async function renderGoods() {
+  const res = await api('goodsList', { page: 1, pageSize: 50 })
+  const main = document.getElementById('pageContent')
+  main.innerHTML = `
+    <div class="card">
+      <div class="card-title">♻️ 物品库 · 共 ${res.data.total} 条</div>
+      <table><thead><tr><th>名称</th><th>分类</th><th>描述</th><th>操作</th></tr></thead><tbody>
+      ${res.data.list.map(g => `<tr>
+        <td><b>${g.name}</b></td>
+        <td><span class="tag ${CATEGORY_COLOR[g.category]||'gray'}">${CATEGORY_NAME[g.category]||g.category}</span></td>
+        <td>${(g.desc||'').slice(0,50)}</td>
+        <td class="actions"><button class="mini-btn danger" onclick="delGoods('${g._id}','${g.name.replace(/'/g,"\\'")}')">删除</button></td>
+      </tr>`).join('')}
+      </tbody></table>
+    </div>
+  `
+}
+async function delGoods(id, name) {
+  if (!confirm(`确认删除「${name}」？`)) return
+  await api('goodsDelete', { id })
+  alert('已删除'); renderGoods()
+}
+
+/* =========== Feedback =========== */
+async function renderFeedback() {
+  const res = await api('feedbackList', { page: 1, pageSize: 50 })
+  const main = document.getElementById('pageContent')
+  main.innerHTML = `
+    <div class="card">
+      <div class="card-title">💬 用户反馈 · 共 ${res.data.total} 条</div>
+      <table><thead><tr><th>内容</th><th>联系方式</th><th>时间</th><th>状态</th><th>操作</th></tr></thead><tbody>
+      ${res.data.list.map(f => `<tr>
+        <td>${f.content||''}</td>
+        <td>${f.contact||'-'}</td>
+        <td class="mono">${formatTime(f.createTime)}</td>
+        <td><span class="tag ${f.status===1?'lime':'pink'}">${f.status===1?'已处理':'待处理'}</span></td>
+        <td class="actions">
+          <button class="mini-btn green" onclick="resolveFb('${f._id}')">已处理</button>
+          <button class="mini-btn danger" onclick="delFb('${f._id}')">删除</button>
+        </td>
+      </tr>`).join('')}
+      </tbody></table>
+    </div>
+  `
+}
+async function resolveFb(id) { await api('feedbackResolve', { id }); alert('已标记'); renderFeedback() }
+async function delFb(id) { if (!confirm('确认删除？')) return; await api('feedbackDelete', { id }); renderFeedback() }
+
+/* =========== Utils =========== */
+function formatTime(t) {
+  if (!t) return '-'
+  const d = new Date(t)
+  if (isNaN(d.getTime())) return String(t).slice(0,19)
+  return d.toLocaleString('zh-CN', { hour12: false }).replace(/\//g, '-')
+}
+
+/* =========== 启动 =========== */
+window.onload = () => {
+  document.getElementById('apiBase').value = API_BASE
+  if (TOKEN && API_BASE) {
+    document.getElementById('loginView').style.display = 'none'
+    document.getElementById('mainView').style.display = 'flex'
+    switchPage('dashboard')
+  }
+  // 回车登录
+  document.addEventListener('keydown', e => { if (e.key === 'Enter' && CURRENT_PAGE) doLogin() })
+}
+</script>
+</body>
+</html>
