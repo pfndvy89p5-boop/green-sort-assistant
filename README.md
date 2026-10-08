@@ -190,19 +190,90 @@ H5 后台通过 HTTP 调用云函数，需为 10 个 `admin*` 云函数开启 HT
 
 ---
 
-## 六、管理员账号信息
+## 六、云函数环境变量配置
+
+> ⚠️ **必须配置**：所有密钥已从代码中移除，改为从云函数环境变量读取。不配置会导致管理员后台无法登录、百度AI 识别不可用。
+
+### 配置位置
+
+云开发控制台 → 云函数 → 选中函数 → **配置** → 环境变量 → 添加变量 → 保存 → 重新部署该函数
+
+### 环境变量清单
+
+| 变量名 | 说明 | 示例值 |
+|--------|------|--------|
+| `ADMIN_SECRET` | HMAC-SHA256 签名密钥（所有 admin 函数必须一致） | 建议 32 位以上随机字符串，如 `aB3k!9Z#2mM...` |
+| `ADMIN_USER` | 管理员账号 | `admin` |
+| `ADMIN_PASS` | 管理员密码 | 自己设定的强密码 |
+| `BAIDU_API_KEY` | 百度智能云 API Key | 百度智能云控制台获取 |
+| `BAIDU_SECRET_KEY` | 百度智能云 Secret Key | 百度智能云控制台获取 |
+
+### 各云函数需要配置的变量
+
+#### 1. `baiduWasteIdentify`（百度AI 图像识别）
+
+| 变量 | 必填 | 说明 |
+|------|------|------|
+| `BAIDU_API_KEY` | ✅ | 百度智能云 API Key |
+| `BAIDU_SECRET_KEY` | ✅ | 百度智能云 Secret Key |
+
+> 申请地址：https://console.bce.baidu.com/ai/#/ai/imageclassify/app/list
+
+#### 2. `adminLogin`（管理员登录）
+
+| 变量 | 必填 | 说明 |
+|------|------|------|
+| `ADMIN_USER` | ✅ | 管理员账号（默认 `admin`） |
+| `ADMIN_PASS` | ✅ | 管理员密码 |
+| `ADMIN_SECRET` | ✅ | 必须与其他 admin 函数一致 |
+
+#### 3. `adminApiGateway`（管理员 API 网关）
+
+| 变量 | 必填 | 说明 |
+|------|------|------|
+| `ADMIN_USER` | ✅ | 必须与 `adminLogin` 一致 |
+| `ADMIN_PASS` | ✅ | 必须与 `adminLogin` 一致 |
+| `ADMIN_SECRET` | ✅ | 必须与其他 admin 函数一致 |
+
+#### 4. 以下 12 个 admin 函数（只需配置 `ADMIN_SECRET`）
+
+`ADMIN_SECRET` 必须与上面 `adminLogin`、`adminApiGateway` 设置的**完全相同**，否则 token 校验失败。
+
+| 云函数 | 变量 |
+|--------|------|
+| `adminAddGoods` | `ADMIN_SECRET` |
+| `adminDeleteFeedback` | `ADMIN_SECRET` |
+| `adminDeleteGoods` | `ADMIN_SECRET` |
+| `adminGetAllHistory` | `ADMIN_SECRET` |
+| `adminGetAllPoints` | `ADMIN_SECRET` |
+| `adminGetDashboard` | `ADMIN_SECRET` |
+| `adminGetFeedbackList` | `ADMIN_SECRET` |
+| `adminGetGoodsList` | `ADMIN_SECRET` |
+| `adminGetStats` | `ADMIN_SECRET` |
+| `adminGetUserList` | `ADMIN_SECRET` |
+| `adminUpdateFeedbackStatus` | `ADMIN_SECRET` |
+| `adminUpdateGoods` | `ADMIN_SECRET` |
+
+### 配置流程（单个云函数）
+
+1. 云开发控制台 → 云函数 → 点击函数名
+2. 「配置」标签 → 环境变量 → 「添加变量」
+3. 输入变量名和值 → 保存
+4. 重新部署该云函数（右键 → 上传并部署：云端安装依赖）
+
+### 验证
+
+- 管理员登录：H5 后台输入账号密码，能返回 token 即成功
+- 百度AI 识别：小程序拍照识别，能返回分类结果即成功
+
+### 管理员账号信息
 
 | 项目 | 值 |
 |------|-----|
-| 账号 | 通过环境变量 `ADMIN_USER` 配置（默认 `admin`） |
-| 密码 | 通过环境变量 `ADMIN_PASS` 配置 |
+| 账号 | `ADMIN_USER`（默认 `admin`） |
+| 密码 | `ADMIN_PASS` |
 | Token 有效期 | 24 小时 |
-| 鉴权方式 | HMAC-SHA256 签名，无状态 token（见各函数 `auth.js`） |
-
-> ⚠️ 部署时需在云开发控制台为以下云函数设置环境变量：
-> - `adminLogin`、`adminApiGateway`：`ADMIN_USER`、`ADMIN_PASS`、`ADMIN_SECRET`
-> - 其他 `admin*` 函数：`ADMIN_SECRET`
-> - `baiduWasteIdentify`：`BAIDU_API_KEY`、`BAIDU_SECRET_KEY`
+| 鉴权方式 | HMAC-SHA256 签名，无状态 token |
 
 ---
 
